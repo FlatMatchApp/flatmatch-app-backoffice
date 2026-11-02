@@ -3,9 +3,14 @@
 Backoffice administrativo de FlatMatch para gestionar solicitudes de validación
 de publicadores de inmuebles.
 
-> **Estado actual:** el proyecto tiene una estructura inicial por funcionalidades.
-> Las vistas y componentes todavía son placeholders; la interfaz y la lógica se
-> implementarán progresivamente, vista por vista.
+> **Estado actual:** el login, el listado, el detalle y el historial de
+> solicitudes tienen una primera implementación con datos simulados. Las
+> decisiones mock se guardan en `localStorage`; la autenticación y las
+> solicitudes reales todavía no están conectadas a un backend.
+
+La aplicación usa React, TypeScript, Vite y Tailwind CSS 4. Para los estilos de
+las vistas, prioriza las utilidades de Tailwind en los componentes; reserva
+`src/index.css` para estilos globales y variables CSS.
 
 ## Requisitos
 
@@ -63,6 +68,7 @@ src/
 ├── features/
 │   ├── auth/                   # Inicio de sesión y autenticación
 │   │   ├── components/
+│   │   ├── context/            # Estado de sesión compartido
 │   │   ├── hooks/
 │   │   ├── pages/
 │   │   ├── services/
@@ -105,13 +111,24 @@ Las rutas están declaradas en `src/routes/AppRouter.tsx`:
 
 | Ruta | Vista |
 | --- | --- |
-| `/login` | Inicio de sesión |
-| `/requests` | Listado de solicitudes |
-| `/requests/:id` | Detalle de una solicitud |
-| `/requests/:id/history` | Historial de una solicitud |
+| `/login` | Inicio de sesión con autenticación simulada |
+| `/requests` | Listado de solicitudes con filtros y datos de muestra |
+| `/requests/:id` | Detalle, documentación de demostración y resolución |
+| `/requests/:id/history` | Trazabilidad de una solicitud y resoluciones del solicitante |
+| `/history` | Historial general de actividad y resoluciones |
 
-Las rutas y páginas son parte del esqueleto inicial: su declaración no implica
-que la autenticación, la protección de acceso ni las vistas estén implementadas.
+Las rutas administrativas están protegidas: sin una sesión se redirige a `/login`.
+La sesión mock se conserva en `sessionStorage` durante la pestaña actual. Para
+probar el flujo, ingresa cualquier correo válido y una contraseña no vacía; el
+modo de prueba no valida credenciales y no debe utilizarse en producción.
+
+La pantalla de solicitudes simula 56 registros. La búsqueda, los filtros por
+estado, tipo y período, la ordenación, la paginación y la descarga CSV operan
+sobre esos datos locales. En el detalle se puede aprobar o rechazar una
+solicitud pendiente; el rechazo requiere categoría y motivo. La resolución se
+guarda con fecha, responsable y motivo. Los archivos del visor son placeholders
+y no contienen documentación real. El historial se construye a partir de las
+resoluciones guardadas y de eventos de demostración.
 
 ## Alias de imports
 
