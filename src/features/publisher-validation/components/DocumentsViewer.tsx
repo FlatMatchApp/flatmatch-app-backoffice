@@ -70,7 +70,7 @@ function DocumentsViewer({
         <h2 className="text-sm font-medium text-[#303936]">
           Documentación presentada
         </h2>
-        <span className="text-[9px] text-[#89938f]">
+        <span className="text-[11px] text-[#89938f]">
           {documents.length} archivos adjuntos
         </span>
       </header>
@@ -104,10 +104,10 @@ function DocumentsViewer({
                   onClick={() => setSelectedDocumentId(document.id)}
                   type="button"
                 >
-                  <span className="block truncate text-[10px] font-medium text-[#3d4642]">
+                  <span className="block truncate text-[12px] font-medium text-[#3d4642]">
                     {document.name}
                   </span>
-                  <span className="mt-0.5 block text-[9px] text-[#89938f]">
+                  <span className="mt-0.5 block text-[11px] text-[#89938f]">
                     PDF · {document.size} · Vista previa
                   </span>
                 </button>
@@ -126,7 +126,7 @@ function DocumentsViewer({
               </div>
             )
           })}
-          <p className="pt-4 text-[9px] text-[#89938f]">
+          <p className="pt-4 text-[11px] text-[#89938f]">
             Cargados el {formatUploadDate(submittedAt)}
           </p>
         </div>
@@ -139,34 +139,34 @@ function DocumentsViewer({
           <div className="flex min-h-[190px] flex-col bg-white p-3 sm:min-h-[214px] sm:p-4">
             <div className="flex items-center gap-2 border-b border-[#e6ebe8] pb-2">
               <Landmark aria-hidden="true" className="text-[#147bc3]" size={17} />
-              <div className="text-[7px] font-semibold leading-tight text-[#3d4642]">
+              <div className="text-[9px] font-semibold leading-tight text-[#3d4642]">
                 COLEGIO PROFESIONAL
                 <br />
                 DE CORREDORES INMOBILIARIOS
               </div>
             </div>
             <div className="mt-4 space-y-2">
-              <p className="text-[9px] font-medium uppercase text-[#68746e]">
+              <p className="text-[11px] font-medium uppercase text-[#68746e]">
                 {selectedDocument.name}
               </p>
-              <p className="text-[8px] uppercase leading-relaxed text-[#56615b]">
+              <p className="text-[10px] uppercase leading-relaxed text-[#56615b]">
                 Constancia de presentación de documentación
               </p>
-              <p className="text-[10px] font-semibold text-[#303936]">
+              <p className="text-[12px] font-semibold text-[#303936]">
                 {applicantName}
               </p>
-              <p className="text-[8px] text-[#77837d]">
+              <p className="text-[10px] text-[#77837d]">
                 Documento presentado para revisión administrativa
               </p>
               <div className="mt-4 h-px w-14 bg-[#aeb9b3]" />
             </div>
             <div className="mt-auto flex justify-end">
-              <span className="rounded border border-[#7bb7ea] px-1.5 py-1 text-[7px] text-[#147bc3]">
+              <span className="rounded border border-[#7bb7ea] px-1.5 py-1 text-[9px] text-[#147bc3]">
                 DEMO
               </span>
             </div>
           </div>
-          <div className="flex items-center justify-between bg-[#edf1ef] px-2.5 py-1.5 text-[8px] text-[#7b8581]">
+          <div className="flex items-center justify-between bg-[#edf1ef] px-2.5 py-1.5 text-[10px] text-[#7b8581]">
             <span>Página 1 de 1 · Vista de demostración</span>
             <Maximize2 aria-hidden="true" size={12} />
           </div>
@@ -175,7 +175,7 @@ function DocumentsViewer({
 
       <footer className="flex justify-end px-4 pb-4 sm:px-5">
         <button
-          className="inline-flex items-center gap-1.5 text-[10px] font-semibold text-[#147bc3] hover:underline"
+          className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[#147bc3] hover:underline"
           onClick={downloadAll}
           type="button"
         >

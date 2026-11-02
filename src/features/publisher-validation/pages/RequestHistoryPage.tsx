@@ -3,6 +3,8 @@ import {
   ArrowLeft,
   ArrowUpDown,
   Check,
+  ChevronLeft,
+  ChevronRight,
   Clock3,
   Download,
   FileCheck2,
@@ -17,6 +19,8 @@ import type {
   PublisherRequestStatus,
   RequestHistoryEvent,
 } from '@/features/publisher-validation/types/publisherValidation.types'
+
+const pageSize = 7
 
 const eventStyles: Record<
   RequestHistoryEvent['type'],
@@ -93,10 +97,16 @@ function RequestHistoryPage() {
   const { events, isLoading: isHistoryLoading, error: historyError } =
     usePublisherRequestHistory(id)
   const [mostRecentFirst, setMostRecentFirst] = useState(true)
+  const [currentPage, setCurrentPage] = useState(1)
 
   const sortedEvents = mostRecentFirst
     ? events
     : [...events].reverse()
+  const pageCount = Math.max(1, Math.ceil(events.length / pageSize))
+  const visibleEvents = events.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize,
+  )
 
   if ((id && isRequestLoading) || isHistoryLoading) {
     return (
@@ -135,12 +145,12 @@ function RequestHistoryPage() {
             <h1 className="text-[22px] font-medium tracking-tight text-[#303936] sm:text-[24px]">
               Historial de resoluciones
             </h1>
-            <p className="mt-1 text-[11px] text-[#7b8581] sm:text-xs">
+            <p className="mt-1 text-[13px] text-[#7b8581] sm:text-[13px]">
               Consulta las decisiones administrativas registradas.
             </p>
           </div>
           <button
-            className="inline-flex h-9 items-center gap-2 rounded-md border border-[#dfe5e2] bg-white px-3 text-[11px] font-semibold text-[#3d4642] shadow-sm hover:bg-[#f8faf9]"
+            className="inline-flex h-9 items-center gap-2 rounded-md border border-[#dfe5e2] bg-white px-3 text-[13px] font-semibold text-[#3d4642] shadow-sm hover:bg-[#f8faf9]"
             onClick={() => exportHistory(events)}
             type="button"
           >
@@ -151,33 +161,33 @@ function RequestHistoryPage() {
 
         <section className="mt-5 overflow-hidden rounded-lg border border-[#e1e6e3] bg-white">
           <div className="overflow-x-auto">
-            <div className="min-w-[620px]">
-              <div className="grid grid-cols-[minmax(0,1.3fr)_minmax(100px,0.7fr)_minmax(110px,0.8fr)_minmax(90px,0.7fr)] gap-3 border-b border-[#e7ebe9] bg-[#fafbfb] px-4 py-3 text-[9px] font-medium text-[#74807b] sm:px-5">
+            <div className="min-h-[440px] min-w-[620px]">
+              <div className="grid grid-cols-[minmax(0,1.3fr)_minmax(100px,0.7fr)_minmax(110px,0.8fr)_minmax(90px,0.7fr)] gap-3 border-b border-[#e7ebe9] bg-[#fafbfb] px-4 py-3 text-[11px] font-medium text-[#74807b] sm:px-5">
                 <span>Evento</span>
                 <span>Solicitud</span>
                 <span>Fecha</span>
                 <span>Estado</span>
               </div>
-              {events.map((event) => (
+              {visibleEvents.map((event) => (
                 <Link
                   className="grid grid-cols-[minmax(0,1.3fr)_minmax(100px,0.7fr)_minmax(110px,0.8fr)_minmax(90px,0.7fr)] items-center gap-3 border-b border-[#e7ebe9] px-4 py-3 last:border-b-0 hover:bg-[#fafbfb] sm:px-5"
                   key={event.id}
                   to={`/requests/${event.historyOwnerId ?? event.requestId}/history`}
                 >
                   <span className="min-w-0">
-                    <span className="block truncate text-[10px] font-semibold text-[#3d4642]">
+                    <span className="block truncate text-[12px] font-semibold text-[#3d4642]">
                       {event.title}
                     </span>
-                    <span className="mt-1 block truncate text-[9px] text-[#89938f]">
+                    <span className="mt-1 block truncate text-[11px] text-[#89938f]">
                       {event.actor} · {event.actorRole}
                     </span>
                   </span>
-                  <span className="text-[10px] text-[#3d4642]">{event.requestId}</span>
-                  <span className="text-[9px] text-[#74807b]">
+                  <span className="text-[12px] text-[#3d4642]">{event.requestId}</span>
+                  <span className="text-[11px] text-[#74807b]">
                     {formatTime(event.occurredAt)}
                   </span>
                   <span
-                    className={`w-fit rounded-full px-2 py-1 text-[9px] font-semibold ${getStatusClass(
+                    className={`w-fit rounded-full px-2 py-1 text-[11px] font-semibold ${getStatusClass(
                       event.type === 'approved' || event.type === 'rejected'
                         ? event.type
                         : 'pending',
@@ -198,6 +208,21 @@ function RequestHistoryPage() {
               Todavía no hay resoluciones registradas.
             </p>
           )}
+          <footer className="flex flex-wrap items-center justify-between gap-3 border-t border-[#e7ebe9] px-4 py-2.5 sm:px-5">
+            <p aria-live="polite" className="text-[11px] text-[#7b8581]">
+              {events.length === 0
+                ? 'No hay resoluciones para mostrar'
+                : `Mostrando ${(currentPage - 1) * pageSize + 1}–${Math.min(
+                    currentPage * pageSize,
+                    events.length,
+                  )} de ${events.length} resoluciones`}
+            </p>
+            <HistoryPagination
+              currentPage={currentPage}
+              onPageChange={setCurrentPage}
+              pageCount={pageCount}
+            />
+          </footer>
         </section>
       </main>
     )
@@ -214,7 +239,7 @@ function RequestHistoryPage() {
   return (
     <main className="mx-auto w-full max-w-[1440px] px-4 py-5 sm:px-6 lg:px-7 lg:py-7">
       <Link
-        className="inline-flex items-center gap-2 text-[10px] font-medium text-[#147bc3] hover:underline"
+        className="inline-flex items-center gap-2 text-[12px] font-medium text-[#147bc3] hover:underline"
         to={`/requests/${request.id}`}
       >
         <ArrowLeft aria-hidden="true" size={16} />
@@ -226,12 +251,12 @@ function RequestHistoryPage() {
           <h1 className="text-[22px] font-medium tracking-tight text-[#303936] sm:text-[24px]">
             Historial de resoluciones
           </h1>
-          <p className="mt-1 text-[11px] text-[#7b8581] sm:text-xs">
+          <p className="mt-1 text-[13px] text-[#7b8581] sm:text-[13px]">
             Decisiones y actividad administrativa asociadas al solicitante.
           </p>
         </div>
         <button
-          className="inline-flex h-9 items-center gap-2 rounded-md border border-[#dfe5e2] bg-white px-3 text-[11px] font-semibold text-[#3d4642] shadow-sm hover:bg-[#f8faf9]"
+          className="inline-flex h-9 items-center gap-2 rounded-md border border-[#dfe5e2] bg-white px-3 text-[13px] font-semibold text-[#3d4642] shadow-sm hover:bg-[#f8faf9]"
           onClick={() => exportHistory(events)}
           type="button"
         >
@@ -242,7 +267,7 @@ function RequestHistoryPage() {
 
       <section className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-[#e1e6e3] bg-white px-4 py-3 sm:px-5">
         <div className="flex min-w-0 items-center gap-3">
-          <span className="grid size-9 shrink-0 place-items-center rounded-full bg-[#eaf0ee] text-xs font-medium text-[#147bc3]">
+          <span className="grid size-9 shrink-0 place-items-center rounded-full bg-[#eaf0ee] text-[13px] font-medium text-[#147bc3]">
             {request.applicantName
               .split(' ')
               .map((part) => part[0])
@@ -251,23 +276,23 @@ function RequestHistoryPage() {
               .toUpperCase()}
           </span>
           <div className="min-w-0">
-            <p className="truncate text-xs font-semibold text-[#303936]">
+            <p className="truncate text-[13px] font-semibold text-[#303936]">
               {request.applicantName}
             </p>
-            <p className="mt-0.5 truncate text-[9px] text-[#7b8581]">
+            <p className="mt-0.5 truncate text-[11px] text-[#7b8581]">
               {request.email} · {request.id}
             </p>
           </div>
         </div>
         <div className="flex items-center gap-3">
           <div className="hidden border-r border-[#e5e9e7] pr-3 text-right sm:block">
-            <p className="text-[8px] uppercase text-[#89938f]">Solicitud actual</p>
-            <p className="mt-0.5 text-[10px] font-semibold text-[#3d4642]">
+            <p className="text-[10px] uppercase text-[#89938f]">Solicitud actual</p>
+            <p className="mt-0.5 text-[12px] font-semibold text-[#3d4642]">
               {request.id}
             </p>
           </div>
           <span
-            className={`rounded-full px-2.5 py-1 text-[9px] font-semibold ${getStatusClass(
+            className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${getStatusClass(
               request.status,
             )}`}
           >
@@ -283,7 +308,7 @@ function RequestHistoryPage() {
               Trazabilidad del solicitante
             </h2>
             <button
-              className="inline-flex shrink-0 items-center gap-1.5 text-[9px] text-[#7b8581] hover:text-[#3d4642]"
+              className="inline-flex shrink-0 items-center gap-1.5 text-[11px] text-[#7b8581] hover:text-[#3d4642]"
               onClick={() => setMostRecentFirst((value) => !value)}
               type="button"
             >
@@ -319,33 +344,33 @@ function RequestHistoryPage() {
               <h2 className="text-sm font-medium text-[#303936]">
                 Resoluciones del solicitante
               </h2>
-              <span className="text-[9px] text-[#89938f]">
+              <span className="text-[11px] text-[#89938f]">
                 {Number(isApproved || isRejected) + Number(previousResolution)}
               </span>
             </header>
             <div className="divide-y divide-[#e7ebe9] px-4">
               <div className="py-3.5">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="text-[10px] font-medium text-[#3d4642]">
+                  <span className="text-[12px] font-medium text-[#3d4642]">
                     {request.id}
                   </span>
                   <span
-                    className={`rounded-full px-2 py-1 text-[9px] font-semibold ${getStatusClass(
+                    className={`rounded-full px-2 py-1 text-[11px] font-semibold ${getStatusClass(
                       request.status,
                     )}`}
                   >
                     {statusLabels[request.status]}
                   </span>
                 </div>
-                <p className="mt-2 text-[9px] text-[#89938f]">
+                <p className="mt-2 text-[11px] text-[#89938f]">
                   {request.resolution
                     ? formatTime(request.resolution.resolvedAt)
                     : `Presentada ${formatTime(request.submittedAt)}`}
                 </p>
-                <p className="mt-1.5 text-[10px] font-medium text-[#4c5751]">
+                <p className="mt-1.5 text-[12px] font-medium text-[#4c5751]">
                   {request.resolution?.responsible ?? request.applicantName}
                 </p>
-                <p className="mt-1.5 text-[9px] leading-4 text-[#89938f]">
+                <p className="mt-1.5 text-[11px] leading-4 text-[#89938f]">
                   {request.resolution?.reason ??
                     'Solicitud pendiente de resolución administrativa.'}
                 </p>
@@ -354,24 +379,24 @@ function RequestHistoryPage() {
               {previousResolution && (
                 <div className="py-3.5">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-[10px] font-medium text-[#3d4642]">
+                    <span className="text-[12px] font-medium text-[#3d4642]">
                       SOL-1031
                     </span>
                     <span
-                      className={`rounded-full px-2 py-1 text-[9px] font-semibold ${getStatusClass(
+                      className={`rounded-full px-2 py-1 text-[11px] font-semibold ${getStatusClass(
                         'rejected',
                       )}`}
                     >
                       Rechazada
                     </span>
                   </div>
-                  <p className="mt-2 text-[9px] text-[#89938f]">
+                  <p className="mt-2 text-[11px] text-[#89938f]">
                     20 oct 2026 · 12:18 h
                   </p>
-                  <p className="mt-1.5 text-[10px] font-medium text-[#4c5751]">
+                  <p className="mt-1.5 text-[12px] font-medium text-[#4c5751]">
                     Diego Salvatierra
                   </p>
-                  <p className="mt-1.5 text-[9px] leading-4 text-[#89938f]">
+                  <p className="mt-1.5 text-[11px] leading-4 text-[#89938f]">
                     No se adjuntó la constancia de matrícula profesional.
                   </p>
                 </div>
@@ -379,7 +404,7 @@ function RequestHistoryPage() {
             </div>
           </section>
 
-          <p className="flex items-start gap-2 px-1 text-[9px] leading-4 text-[#89938f]">
+          <p className="flex items-start gap-2 px-1 text-[11px] leading-4 text-[#89938f]">
             <FileCheck2
               aria-hidden="true"
               className="mt-0.5 shrink-0"
@@ -391,10 +416,78 @@ function RequestHistoryPage() {
         </div>
       </div>
 
-      <p className="mt-6 text-[9px] text-[#89938f]">
+      <p className="mt-6 text-[11px] text-[#89938f]">
         Fechas y horarios en hora de Argentina (UTC−3).
       </p>
     </main>
+  )
+}
+
+function HistoryPagination({
+  currentPage,
+  onPageChange,
+  pageCount,
+}: {
+  currentPage: number
+  onPageChange: (page: number) => void
+  pageCount: number
+}) {
+  let pages: number[]
+
+  if (pageCount <= 4) {
+    pages = Array.from({ length: pageCount }, (_, index) => index + 1)
+  } else if (currentPage <= 2) {
+    pages = [1, 2, 3, pageCount]
+  } else if (currentPage >= pageCount - 1) {
+    pages = [1, pageCount - 2, pageCount - 1, pageCount]
+  } else {
+    pages = [1, currentPage - 1, currentPage, currentPage + 1, pageCount]
+  }
+
+  return (
+    <nav aria-label="Paginación del historial" className="flex items-center gap-1">
+      <button
+        aria-label="Página anterior"
+        className="flex h-7 items-center gap-1 rounded-md border border-[#e1e6e3] px-2 text-[11px] text-[#424b47] disabled:opacity-40"
+        disabled={currentPage === 1}
+        onClick={() => onPageChange(Math.max(1, currentPage - 1))}
+        type="button"
+      >
+        <ChevronLeft aria-hidden="true" size={12} />
+        <span className="hidden sm:inline">Anterior</span>
+      </button>
+      {pages.map((page, index) => (
+        <span className="flex items-center gap-1" key={page}>
+          {index > 0 && page - pages[index - 1] > 1 && (
+            <span aria-hidden="true" className="px-1 text-[12px] text-[#7b8581]">
+              …
+            </span>
+          )}
+          <button
+            aria-current={currentPage === page ? 'page' : undefined}
+            className={`grid size-7 place-items-center rounded-md text-[11px] ${
+              currentPage === page
+                ? 'bg-[#e9eaff] font-semibold text-[#3e57c7]'
+                : 'text-[#606b66] hover:bg-[#f2f4f3]'
+            }`}
+            onClick={() => onPageChange(page)}
+            type="button"
+          >
+            {page}
+          </button>
+        </span>
+      ))}
+      <button
+        aria-label="Página siguiente"
+        className="flex h-7 items-center gap-1 rounded-md border border-[#e1e6e3] px-2 text-[11px] text-[#424b47] disabled:opacity-40"
+        disabled={currentPage === pageCount}
+        onClick={() => onPageChange(Math.min(pageCount, currentPage + 1))}
+        type="button"
+      >
+        <span className="hidden sm:inline">Siguiente</span>
+        <ChevronRight aria-hidden="true" size={12} />
+      </button>
+    </nav>
   )
 }
 
@@ -428,20 +521,20 @@ function HistoryTimelineItem({
       </span>
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-start justify-between gap-x-3 gap-y-1">
-          <h3 className="text-[10px] font-semibold text-[#35403b]">
+          <h3 className="text-[12px] font-semibold text-[#35403b]">
             {event.title}
           </h3>
           <time
-            className="shrink-0 text-[8px] text-[#89938f]"
+            className="shrink-0 text-[10px] text-[#89938f]"
             dateTime={event.occurredAt}
           >
             {formatTime(event.occurredAt)}
           </time>
         </div>
-        <p className="mt-1 text-[8px] text-[#89938f]">
+        <p className="mt-1 text-[10px] text-[#89938f]">
           {event.actor} · {event.actorRole}
         </p>
-        <p className="mt-1.5 text-[9px] leading-4 text-[#7b8581]">
+        <p className="mt-1.5 text-[11px] leading-4 text-[#7b8581]">
           {event.description}
         </p>
       </div>

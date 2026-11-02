@@ -97,7 +97,7 @@ function StatusBadge({ status }: { status: PublisherRequestStatus }) {
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-[10px] font-semibold ${colorClasses[status]}`}
+      className={`inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-[12px] font-semibold ${colorClasses[status]}`}
     >
       <span className="size-1.5 rounded-full bg-current" />
       {statusLabels[status]}
@@ -181,12 +181,12 @@ function RequestsPage() {
           <h1 className="text-[22px] font-medium tracking-tight text-[#303936] sm:text-[24px]">
             Solicitudes de validación
           </h1>
-          <p className="mt-1 text-[11px] text-[#7b8581] sm:text-xs">
+          <p className="mt-1 text-[13px] text-[#7b8581] sm:text-[13px]">
             Revisa y gestiona las habilitaciones para publicar inmuebles.
           </p>
         </div>
         <button
-          className="inline-flex h-9 items-center gap-2 rounded-md border border-[#dfe5e2] bg-white px-3 text-[11px] font-semibold text-[#3d4642] shadow-sm transition-colors hover:bg-[#f8faf9] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#147bc3]"
+          className="inline-flex h-9 items-center gap-2 rounded-md border border-[#dfe5e2] bg-white px-3 text-[13px] font-semibold text-[#3d4642] shadow-sm transition-colors hover:bg-[#f8faf9] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#147bc3]"
           onClick={exportRequests}
           type="button"
         >
@@ -256,7 +256,7 @@ function RequestsPage() {
             <Search aria-hidden="true" size={15} />
             <span className="sr-only">Buscar solicitudes</span>
             <input
-              className="h-full min-w-0 flex-1 border-0 bg-transparent text-[10px] text-[#3d4642] outline-none placeholder:text-[#89938f]"
+              className="h-full min-w-0 flex-1 border-0 bg-transparent text-[12px] text-[#3d4642] outline-none placeholder:text-[#89938f]"
               onChange={(event) =>
                 updateFilter(() => setSearch(event.target.value))
               }
@@ -270,7 +270,7 @@ function RequestsPage() {
             <ChevronDown aria-hidden="true" className="pointer-events-none absolute right-2" size={14} />
             <span className="sr-only">Tipo de publicador</span>
             <select
-              className="h-full min-w-0 appearance-none bg-transparent pr-5 text-[10px] font-semibold outline-none"
+              className="h-full min-w-0 appearance-none bg-transparent pr-5 text-[12px] font-semibold outline-none"
               onChange={(event) =>
                 updateFilter(() =>
                   setPublisherType(event.target.value as 'all' | PublisherType),
@@ -288,7 +288,7 @@ function RequestsPage() {
             <CalendarDays aria-hidden="true" size={14} />
             <span className="sr-only">Período</span>
             <select
-              className="h-full appearance-none bg-transparent pr-1 text-[10px] font-semibold outline-none"
+              className="h-full appearance-none bg-transparent pr-1 text-[12px] font-semibold outline-none"
               onChange={(event) =>
                 updateFilter(() => setDateFilter(event.target.value as '30' | 'all'))
               }
@@ -301,7 +301,7 @@ function RequestsPage() {
           </label>
 
           <button
-            className="hidden items-center justify-end gap-1.5 px-1 text-[10px] text-[#78837e] sm:flex"
+            className="hidden items-center justify-end gap-1.5 px-1 text-[12px] text-[#78837e] sm:flex"
             onClick={() => setSortNewestFirst((newestFirst) => !newestFirst)}
             type="button"
           >
@@ -327,16 +327,23 @@ function RequestsPage() {
               <p className="text-sm font-medium text-[#3d4642]">
                 No se encontraron solicitudes
               </p>
-              <p className="mt-1 text-xs text-[#7b8581]">
+              <p className="mt-1 text-[13px] text-[#7b8581]">
                 Prueba cambiar los filtros o el término de búsqueda.
               </p>
             </div>
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[740px] border-collapse text-left">
+            <table className="w-full min-w-[740px] table-fixed border-collapse text-left">
+              <colgroup>
+                <col className="w-[30%]" />
+                <col className="w-[20%]" />
+                <col className="w-[18%]" />
+                <col className="w-[14%]" />
+                <col className="w-[18%]" />
+              </colgroup>
               <thead>
-                <tr className="h-[34px] border-b border-[#e7ebe9] bg-[#fafbfb] text-[9px] font-medium text-[#74807b]">
+                <tr className="h-[34px] border-b border-[#e7ebe9] bg-[#fafbfb] text-[11px] font-medium text-[#74807b]">
                   <th className="px-4 font-medium sm:px-5">Solicitante</th>
                   <th className="px-3 font-medium">Solicitud / Tipo</th>
                   <th className="px-3 font-medium">
@@ -358,7 +365,7 @@ function RequestsPage() {
               <tbody>
                 {visibleRequests.map((request, index) => (
                   <tr
-                    className={`h-[48px] border-b border-[#e7ebe9] text-[10px] last:border-b-0 ${
+                    className={`h-[48px] border-b border-[#e7ebe9] text-[12px] last:border-b-0 ${
                       index === 0 && currentPage === 1
                         ? 'bg-[#fbf9ff]'
                         : 'bg-white hover:bg-[#fafbfb]'
@@ -367,14 +374,14 @@ function RequestsPage() {
                   >
                     <td className="px-4 sm:px-5">
                       <div className="flex items-center gap-2.5">
-                        <span className="grid size-[27px] shrink-0 place-items-center rounded-full bg-[#edf1f0] text-[9px] font-semibold text-[#4c78c2]">
+                        <span className="grid size-[27px] shrink-0 place-items-center rounded-full bg-[#edf1f0] text-[11px] font-semibold text-[#4c78c2]">
                           {getInitials(request.applicantName)}
                         </span>
                         <span className="min-w-0">
                           <span className="block truncate font-semibold text-[#303936]">
                             {request.applicantName}
                           </span>
-                          <span className="mt-0.5 block truncate text-[9px] text-[#858f8b]">
+                          <span className="mt-0.5 block truncate text-[11px] text-[#858f8b]">
                             {request.email}
                           </span>
                         </span>
@@ -384,7 +391,7 @@ function RequestsPage() {
                       <span className="block font-semibold text-[#3d4642]">
                         {request.id}
                       </span>
-                      <span className="mt-0.5 block text-[9px] text-[#858f8b]">
+                      <span className="mt-0.5 block text-[11px] text-[#858f8b]">
                         {request.publisherType}
                       </span>
                     </td>
@@ -392,7 +399,7 @@ function RequestsPage() {
                       <span className="block text-[#424b47]">
                         {formatDate(request.submittedAt)}
                       </span>
-                      <span className="mt-0.5 block text-[9px] text-[#858f8b]">
+                      <span className="mt-0.5 block text-[11px] text-[#858f8b]">
                         {formatTime(request.submittedAt)} h
                       </span>
                     </td>
@@ -401,7 +408,7 @@ function RequestsPage() {
                     </td>
                     <td className="px-4 text-right sm:px-5">
                       <Link
-                        className="inline-flex items-center gap-1 text-[10px] font-semibold text-[#2857d5] hover:text-[#173cb0] hover:underline"
+                        className="inline-flex items-center gap-1 text-[12px] font-semibold text-[#2857d5] hover:text-[#173cb0] hover:underline"
                         to={`/requests/${request.id}`}
                       >
                         Ver detalle
@@ -410,13 +417,25 @@ function RequestsPage() {
                     </td>
                   </tr>
                 ))}
+                {Array.from(
+                  { length: pageSize - visibleRequests.length },
+                  (_, index) => (
+                    <tr
+                      aria-hidden="true"
+                      className="h-[48px] border-b border-[#e7ebe9] last:border-b-0"
+                      key={`empty-row-${index}`}
+                    >
+                      <td colSpan={5} />
+                    </tr>
+                  ),
+                )}
               </tbody>
             </table>
           </div>
         )}
 
         <footer className="flex flex-wrap items-center justify-between gap-3 border-t border-[#e7ebe9] px-4 py-2.5 sm:px-4">
-          <p aria-live="polite" className="text-[9px] text-[#7b8581]">
+          <p aria-live="polite" className="text-[11px] text-[#7b8581]">
             {filteredRequests.length === 0
               ? 'No hay solicitudes para mostrar'
               : `Mostrando ${(currentPage - 1) * pageSize + 1}–${Math.min(
@@ -432,7 +451,7 @@ function RequestsPage() {
         </footer>
       </section>
 
-      <p className="mt-4 text-[9px] text-[#8a9490]">
+      <p className="mt-4 text-[11px] text-[#8a9490]">
         Fechas y horarios en hora de Argentina (UTC−3).
       </p>
     </main>
@@ -458,13 +477,13 @@ function StatCard({
         {icon}
       </span>
       <div className="min-w-0 flex-1">
-        <p className="text-[9px] text-[#78837e]">{label}</p>
+        <p className="text-[11px] text-[#78837e]">{label}</p>
         <p className="mt-0.5 flex items-center gap-1.5 text-[20px] leading-none font-medium text-[#303936]">
           {value}
           <span className={`size-1.5 rounded-full ${marker}`} />
         </p>
       </div>
-      <span className="hidden text-right text-[8px] text-[#89938f] sm:block">
+      <span className="hidden text-right text-[10px] text-[#89938f] sm:block">
         {caption}
       </span>
     </article>
@@ -485,7 +504,7 @@ function StatusTab({
   return (
     <button
       aria-selected={active}
-      className={`relative shrink-0 px-3 py-3 text-[10px] ${
+      className={`relative shrink-0 px-3 py-3 text-[12px] ${
         active
           ? 'font-semibold text-[#35403b] after:absolute after:right-3 after:bottom-0 after:left-3 after:h-0.5 after:bg-[#f07218] sm:px-2'
           : 'text-[#7b8581] hover:text-[#35403b]'
@@ -524,7 +543,7 @@ function Pagination({
     <nav aria-label="Paginación" className="flex items-center gap-1">
       <button
         aria-label="Página anterior"
-        className="flex h-7 items-center gap-1 rounded-md border border-[#e1e6e3] px-2 text-[9px] text-[#424b47] disabled:opacity-40"
+        className="flex h-7 items-center gap-1 rounded-md border border-[#e1e6e3] px-2 text-[11px] text-[#424b47] disabled:opacity-40"
         disabled={currentPage === 1}
         onClick={() => onPageChange(Math.max(1, currentPage - 1))}
         type="button"
@@ -535,13 +554,13 @@ function Pagination({
       {pages.map((page, index) => (
         <Fragment key={page}>
           {index > 0 && page - pages[index - 1] > 1 && (
-            <span aria-hidden="true" className="px-1 text-[10px] text-[#7b8581]">
+            <span aria-hidden="true" className="px-1 text-[12px] text-[#7b8581]">
               …
             </span>
           )}
           <button
             aria-current={currentPage === page ? 'page' : undefined}
-            className={`grid size-7 place-items-center rounded-md text-[9px] ${
+            className={`grid size-7 place-items-center rounded-md text-[11px] ${
               currentPage === page
                 ? 'bg-[#e9eaff] font-semibold text-[#3e57c7]'
                 : 'text-[#606b66] hover:bg-[#f2f4f3]'
@@ -555,7 +574,7 @@ function Pagination({
       ))}
       <button
         aria-label="Página siguiente"
-        className="flex h-7 items-center gap-1 rounded-md border border-[#e1e6e3] px-2 text-[9px] text-[#424b47] disabled:opacity-40"
+        className="flex h-7 items-center gap-1 rounded-md border border-[#e1e6e3] px-2 text-[11px] text-[#424b47] disabled:opacity-40"
         disabled={currentPage === pageCount}
         onClick={() => onPageChange(Math.min(pageCount, currentPage + 1))}
         type="button"

@@ -21,13 +21,13 @@ function ApplicantInformation({ request, details }: ApplicantInformationProps) {
         <h2 className="text-sm font-medium text-[#303936]">
           Información del solicitante
         </h2>
-        <span className="text-[9px] text-[#89938f]">Datos declarados</span>
+        <span className="text-[11px] text-[#89938f]">Datos declarados</span>
       </header>
       <dl className="grid gap-x-6 gap-y-4 px-4 py-4 sm:grid-cols-2 sm:px-5 lg:grid-cols-3">
         {fields.map((field) => (
           <div className="min-w-0" key={field.label}>
-            <dt className="text-[10px] text-[#858f8b]">{field.label}</dt>
-            <dd className="mt-1 break-words text-[11px] font-medium text-[#3d4642]">
+            <dt className="text-[12px] text-[#858f8b]">{field.label}</dt>
+            <dd className="mt-1 break-words text-[13px] font-medium text-[#3d4642]">
               {field.value}
             </dd>
           </div>

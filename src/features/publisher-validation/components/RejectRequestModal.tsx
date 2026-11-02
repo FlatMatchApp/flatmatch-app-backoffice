@@ -83,7 +83,7 @@ function RejectRequestModal({
         </p>
 
         <div className="mt-5 flex items-center gap-3 rounded-lg bg-[#f5f8f7] px-3.5 py-3">
-          <span className="grid size-9 shrink-0 place-items-center rounded-full bg-[#e8efed] text-[10px] font-semibold text-[#147bc3]">
+          <span className="grid size-9 shrink-0 place-items-center rounded-full bg-[#e8efed] text-[12px] font-semibold text-[#147bc3]">
             {request.applicantName
               .split(' ')
               .map((part) => part[0])
@@ -92,23 +92,23 @@ function RejectRequestModal({
               .toUpperCase()}
           </span>
           <div>
-            <p className="text-xs font-semibold text-[#303936]">
+            <p className="text-[13px] font-semibold text-[#303936]">
               {request.applicantName}
             </p>
-            <p className="mt-0.5 text-[10px] text-[#7b8581]">
+            <p className="mt-0.5 text-[12px] text-[#7b8581]">
               {request.id} · {request.publisherType}
             </p>
           </div>
         </div>
 
         <label
-          className="mt-5 block text-[11px] font-semibold text-[#303936]"
+          className="mt-5 block text-[13px] font-semibold text-[#303936]"
           htmlFor="rejection-category"
         >
           Categoría
         </label>
         <select
-          className="mt-1.5 h-10 w-full rounded-md border border-[#dfe5e2] bg-white px-3 text-xs text-[#3d4642] outline-none focus:border-[#147bc3] focus:ring-2 focus:ring-[#147bc3]/10"
+          className="mt-1.5 h-10 w-full rounded-md border border-[#dfe5e2] bg-white px-3 text-[13px] text-[#3d4642] outline-none focus:border-[#147bc3] focus:ring-2 focus:ring-[#147bc3]/10"
           id="rejection-category"
           onChange={(event) => setCategory(event.target.value)}
           value={category}
@@ -122,18 +122,18 @@ function RejectRequestModal({
 
         <div className="mt-4 flex items-center justify-between gap-2">
           <label
-            className="text-[11px] font-semibold text-[#303936]"
+            className="text-[13px] font-semibold text-[#303936]"
             htmlFor="rejection-reason"
           >
             Motivo del rechazo <span className="text-[#d92727]">*</span>
           </label>
           {!reason.trim() && (
-            <span className="text-[10px] text-[#d92727]">Obligatorio</span>
+            <span className="text-[12px] text-[#d92727]">Obligatorio</span>
           )}
         </div>
         <textarea
           aria-describedby="rejection-hint rejection-counter"
-          className="mt-1.5 min-h-[112px] w-full resize-y rounded-md border border-[#b8c2bd] p-3 text-xs leading-5 text-[#3d4642] outline-none focus:border-[#147bc3] focus:ring-2 focus:ring-[#147bc3]/10"
+          className="mt-1.5 min-h-[112px] w-full resize-y rounded-md border border-[#b8c2bd] p-3 text-[13px] leading-5 text-[#3d4642] outline-none focus:border-[#147bc3] focus:ring-2 focus:ring-[#147bc3]/10"
           id="rejection-reason"
           maxLength={500}
           onChange={(event) => setReason(event.target.value)}
@@ -141,12 +141,12 @@ function RejectRequestModal({
           required
           value={reason}
         />
-        <div className="mt-1 flex justify-between gap-2 text-[9px] text-[#89938f]">
+        <div className="mt-1 flex justify-between gap-2 text-[11px] text-[#89938f]">
           <span id="rejection-hint">Escribe un motivo claro para el solicitante.</span>
           <span id="rejection-counter">{reason.length}/500</span>
         </div>
 
-        <div className="mt-4 flex items-start gap-2 rounded-md bg-[#fff0f0] px-3 py-3 text-[10px] leading-4 text-[#c62828]">
+        <div className="mt-4 flex items-start gap-2 rounded-md bg-[#fff0f0] px-3 py-3 text-[12px] leading-4 text-[#c62828]">
           <AlertCircle aria-hidden="true" className="mt-0.5 shrink-0" size={15} />
           <p>
             Este motivo se enviará al solicitante y quedará registrado en el
@@ -156,20 +156,20 @@ function RejectRequestModal({
 
         {error && (
           <p
-            className="mt-3 rounded-md bg-[#fff0f0] px-3 py-2 text-xs text-[#b42318]"
+            className="mt-3 rounded-md bg-[#fff0f0] px-3 py-2 text-[13px] text-[#b42318]"
             role="alert"
           >
             {error}
           </p>
         )}
 
-        <p className="mt-4 border-b border-[#e0e5e2] pb-4 text-[10px] text-[#74807a]">
+        <p className="mt-4 border-b border-[#e0e5e2] pb-4 text-[12px] text-[#74807a]">
           Responsable: {responsible}
         </p>
 
         <div className="mt-4 flex flex-col-reverse justify-end gap-2 sm:flex-row">
           <button
-            className="h-10 rounded-md border border-[#dfe5e2] px-4 text-xs font-semibold text-[#3d4642] hover:bg-[#f7f9f8] disabled:opacity-60"
+            className="h-10 rounded-md border border-[#dfe5e2] px-4 text-[13px] font-semibold text-[#3d4642] hover:bg-[#f7f9f8] disabled:opacity-60"
             disabled={isSubmitting}
             onClick={onClose}
             type="button"
@@ -177,7 +177,7 @@ function RejectRequestModal({
             Cancelar
           </button>
           <button
-            className="h-10 rounded-md bg-[#147bc3] px-4 text-xs font-semibold text-white hover:bg-[#116eae] disabled:cursor-not-allowed disabled:opacity-50"
+            className="h-10 rounded-md bg-[#147bc3] px-4 text-[13px] font-semibold text-white hover:bg-[#116eae] disabled:cursor-not-allowed disabled:opacity-50"
             disabled={isSubmitting || !reason.trim()}
             onClick={() => onConfirm(category, reason)}
             type="button"

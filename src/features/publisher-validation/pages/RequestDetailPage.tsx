@@ -60,7 +60,7 @@ function StatusBadge({ status }: { status: PublisherRequestStatus }) {
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-[10px] font-semibold ${styles[status]}`}
+      className={`inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-[12px] font-semibold ${styles[status]}`}
     >
       <span className="size-1.5 rounded-full bg-current" />
       {labels[status]}
@@ -162,7 +162,7 @@ function RequestDetailPage() {
     <>
       <main className="mx-auto w-full max-w-[1440px] px-4 py-5 sm:px-6 lg:px-7 lg:py-7">
         <Link
-          className="inline-flex items-center gap-2 text-[10px] font-medium text-[#147bc3] hover:underline"
+          className="inline-flex items-center gap-2 text-[12px] font-medium text-[#147bc3] hover:underline"
           to="/requests"
         >
           <ArrowLeft aria-hidden="true" size={16} />
@@ -171,7 +171,7 @@ function RequestDetailPage() {
 
         <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
           <div className="flex min-w-0 items-center gap-3">
-            <span className="grid size-10 shrink-0 place-items-center rounded-full bg-[#eaf0ee] text-xs font-medium text-[#147bc3]">
+            <span className="grid size-10 shrink-0 place-items-center rounded-full bg-[#eaf0ee] text-[13px] font-medium text-[#147bc3]">
               {getInitials(request.applicantName)}
             </span>
             <div className="min-w-0">
@@ -181,14 +181,14 @@ function RequestDetailPage() {
                 </h1>
                 <StatusBadge status={request.status} />
               </div>
-              <p className="mt-1 text-[9px] text-[#7b8581] sm:text-[10px]">
+              <p className="mt-1 text-[11px] text-[#7b8581] sm:text-[12px]">
                 Solicitud {request.id} · {request.publisherType} ·{' '}
                 {formatDateTime(request.submittedAt)} h
               </p>
             </div>
           </div>
           <Link
-            className="inline-flex h-9 items-center gap-2 rounded-md border border-[#dfe5e2] bg-white px-3 text-[10px] font-semibold text-[#3d4642] shadow-sm hover:bg-[#f8faf9]"
+            className="inline-flex h-9 items-center gap-2 rounded-md border border-[#dfe5e2] bg-white px-3 text-[12px] font-semibold text-[#3d4642] shadow-sm hover:bg-[#f8faf9]"
             to={`/requests/${request.id}/history`}
           >
             <History aria-hidden="true" size={14} />
@@ -203,8 +203,8 @@ function RequestDetailPage() {
           >
             <span className="mt-0.5 shrink-0">{statusNotice.icon}</span>
             <div>
-              <p className="text-[11px] font-semibold">{statusNotice.title}</p>
-              <p className="mt-0.5 text-[10px] leading-4">
+              <p className="text-[13px] font-semibold">{statusNotice.title}</p>
+              <p className="mt-0.5 text-[12px] leading-4">
                 {statusNotice.description}
               </p>
             </div>
@@ -233,17 +233,17 @@ function RequestDetailPage() {
                   </h2>
                 </header>
                 <div className="p-4">
-                  <p className="flex items-center gap-2 text-[10px] font-semibold text-[#147bc3]">
+                  <p className="flex items-center gap-2 text-[12px] font-semibold text-[#147bc3]">
                     <Clock3 aria-hidden="true" size={15} />
                     Esperando revisión
                   </p>
-                  <p className="mt-3 text-[10px] leading-4 text-[#7b8581]">
+                  <p className="mt-3 text-[12px] leading-4 text-[#7b8581]">
                     Verifica la identidad y la vigencia de los documentos antes
                     de resolver.
                   </p>
                   {decisionError && (
                     <p
-                      className="mt-3 rounded-md bg-[#fff0f0] px-3 py-2 text-[10px] text-[#b42318]"
+                      className="mt-3 rounded-md bg-[#fff0f0] px-3 py-2 text-[12px] text-[#b42318]"
                       role="alert"
                     >
                       {decisionError}
@@ -251,7 +251,7 @@ function RequestDetailPage() {
                   )}
                   <div className="mt-4 space-y-2">
                     <button
-                      className="flex h-9 w-full items-center justify-center gap-2 rounded-md bg-[#147bc3] text-[10px] font-semibold text-white hover:bg-[#116eae]"
+                      className="flex h-9 w-full items-center justify-center gap-2 rounded-md bg-[#147bc3] text-[12px] font-semibold text-white hover:bg-[#116eae]"
                       onClick={() => {
                         setDecisionError(null)
                         setDialog('approve')
@@ -262,7 +262,7 @@ function RequestDetailPage() {
                       Aprobar solicitud
                     </button>
                     <button
-                      className="flex h-9 w-full items-center justify-center gap-2 rounded-md border border-[#f2c5c5] bg-white text-[10px] font-semibold text-[#c62828] hover:bg-[#fff7f7]"
+                      className="flex h-9 w-full items-center justify-center gap-2 rounded-md border border-[#f2c5c5] bg-white text-[12px] font-semibold text-[#c62828] hover:bg-[#fff7f7]"
                       onClick={() => {
                         setDecisionError(null)
                         setDialog('reject')
@@ -273,7 +273,7 @@ function RequestDetailPage() {
                       Rechazar solicitud
                     </button>
                   </div>
-                  <p className="mt-4 text-[9px] leading-4 text-[#89938f]">
+                  <p className="mt-4 text-[11px] leading-4 text-[#89938f]">
                     La decisión se registrará en el historial y se notificará
                     al solicitante.
                   </p>
@@ -296,7 +296,7 @@ function RequestDetailPage() {
                   'Documentación presentada para revisión',
                 ].map((check) => (
                   <li
-                    className="flex items-start gap-2 text-[10px] text-[#4c5751]"
+                    className="flex items-start gap-2 text-[12px] text-[#4c5751]"
                     key={check}
                   >
                     <CircleCheck
@@ -310,7 +310,7 @@ function RequestDetailPage() {
               </ul>
             </section>
 
-            <p className="flex items-start gap-2 px-1 text-[9px] leading-4 text-[#89938f]">
+            <p className="flex items-start gap-2 px-1 text-[11px] leading-4 text-[#89938f]">
               <ClipboardList
                 aria-hidden="true"
                 className="mt-0.5 shrink-0"
@@ -322,7 +322,7 @@ function RequestDetailPage() {
           </aside>
         </div>
 
-        <p className="mt-6 text-[9px] text-[#89938f]">
+        <p className="mt-6 text-[11px] text-[#89938f]">
           Todos los horarios corresponden a Argentina (UTC−3).
         </p>
       </main>
@@ -403,8 +403,8 @@ function ResolutionCard({ request }: { request: PublisherRequest }) {
 function ResolutionField({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <dt className="text-[9px] text-[#89938f]">{label}</dt>
-      <dd className="mt-1 break-words text-[10px] font-medium leading-4 text-[#3d4642]">
+      <dt className="text-[11px] text-[#89938f]">{label}</dt>
+      <dd className="mt-1 break-words text-[12px] font-medium leading-4 text-[#3d4642]">
         {value}
       </dd>
     </div>

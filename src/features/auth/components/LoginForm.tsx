@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useState, type SubmitEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/features/auth/hooks/useAuth'
 
@@ -9,7 +9,7 @@ function LoginForm() {
   const [message, setMessage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault()
     setMessage('')
     setIsSubmitting(true)
@@ -37,7 +37,7 @@ function LoginForm() {
     <form className="space-y-4" onSubmit={handleSubmit}>
       <div>
         <label
-          className="mb-1.5 block text-[10px] font-semibold text-[#303936]"
+          className="mb-1.5 block text-[12px] font-semibold text-[#303936]"
           htmlFor="email"
         >
           Correo electrónico
@@ -65,7 +65,7 @@ function LoginForm() {
           </svg>
           <input
             autoComplete="username"
-            className="h-full min-w-0 flex-1 border-0 bg-transparent text-[11px] text-[#303936] outline-none placeholder:text-[#9aa39f]"
+            className="h-full min-w-0 flex-1 border-0 bg-transparent text-[13px] text-[#303936] outline-none placeholder:text-[#9aa39f]"
             id="email"
             name="email"
             placeholder="nombre@empresa.com"
@@ -77,7 +77,7 @@ function LoginForm() {
 
       <div>
         <label
-          className="mb-1.5 block text-[10px] font-semibold text-[#303936]"
+          className="mb-1.5 block text-[12px] font-semibold text-[#303936]"
           htmlFor="password"
         >
           Contraseña
@@ -108,7 +108,7 @@ function LoginForm() {
           </svg>
           <input
             autoComplete="current-password"
-            className="h-full min-w-0 flex-1 border-0 bg-transparent text-[11px] text-[#303936] outline-none placeholder:text-[#9aa39f]"
+            className="h-full min-w-0 flex-1 border-0 bg-transparent text-[13px] text-[#303936] outline-none placeholder:text-[#9aa39f]"
             id="password"
             name="password"
             placeholder="Ingresa tu contraseña"
@@ -169,20 +169,8 @@ function LoginForm() {
         </div>
       </div>
 
-      <div className="flex justify-end pt-0.5">
-        <button
-          className="text-[10px] font-semibold text-[#147bc3] hover:underline focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#147bc3]"
-          onClick={() =>
-            setMessage('La recuperación de contraseña estará disponible próximamente.')
-          }
-          type="button"
-        >
-          ¿Olvidaste tu contraseña?
-        </button>
-      </div>
-
       <button
-        className="flex h-9 w-full items-center justify-center gap-2 rounded-[5px] bg-[#147bc3] text-[11px] font-medium text-white transition-colors hover:bg-[#116eae] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#147bc3] active:bg-[#0f629e] disabled:cursor-wait disabled:opacity-70"
+        className="flex h-9 w-full items-center justify-center gap-2 rounded-[5px] bg-[#147bc3] text-[13px] font-medium text-white transition-colors hover:bg-[#116eae] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#147bc3] active:bg-[#0f629e] disabled:cursor-wait disabled:opacity-70"
         disabled={isSubmitting}
         type="submit"
       >
@@ -204,13 +192,13 @@ function LoginForm() {
       </button>
 
       {message && (
-        <p aria-live="polite" className="text-center text-[10px] text-[#b42318]" role="status">
+        <p aria-live="polite" className="text-center text-[12px] text-[#b42318]" role="status">
           {message}
         </p>
       )}
 
       <div className="border-t border-[#e5e9e7] pt-3">
-        <p className="flex items-center justify-center gap-1.5 text-[9px] text-[#7b8581]">
+        <p className="flex items-center justify-center gap-1.5 text-[11px] text-[#7b8581]">
           <svg
             aria-hidden="true"
             className="size-3.5"

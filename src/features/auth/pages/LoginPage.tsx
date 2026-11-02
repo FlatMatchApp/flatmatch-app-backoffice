@@ -42,7 +42,7 @@ function LoginPage() {
               FlatMatch
             </span>
           </div>
-          <p className="text-[8px] font-medium uppercase tracking-wide text-[#84908c]">
+          <p className="text-[10px] font-medium uppercase tracking-wide text-[#84908c]">
             Backoffice administrativo
           </p>
         </header>
@@ -54,16 +54,13 @@ function LoginPage() {
           >
             Te damos la bienvenida
           </h1>
-          <p className="text-[11px] leading-[1.5] text-[#747e7a]">
+          <p className="text-[13px] leading-[1.5] text-[#747e7a]">
             Inicia sesión con tu cuenta administrativa para gestionar la
             validación de publicadores.
           </p>
         </div>
 
         <LoginForm />
-        <p className="mt-3 text-center text-[9px] text-[#89938f]">
-          Modo de prueba: ingresa cualquier correo y contraseña.
-        </p>
       </section>
     </main>
   )

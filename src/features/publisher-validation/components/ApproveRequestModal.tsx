@@ -77,7 +77,7 @@ function ApproveRequestModal({
         </p>
 
         <div className="mt-4 flex items-center gap-3 rounded-lg bg-[#f5f8f7] px-3.5 py-3">
-          <span className="grid size-9 shrink-0 place-items-center rounded-full bg-[#e8efed] text-[10px] font-semibold text-[#147bc3]">
+          <span className="grid size-9 shrink-0 place-items-center rounded-full bg-[#e8efed] text-[12px] font-semibold text-[#147bc3]">
             {request.applicantName
               .split(' ')
               .map((part) => part[0])
@@ -86,48 +86,48 @@ function ApproveRequestModal({
               .toUpperCase()}
           </span>
           <div>
-            <p className="text-xs font-semibold text-[#303936]">
+            <p className="text-[13px] font-semibold text-[#303936]">
               {request.applicantName}
             </p>
-            <p className="mt-0.5 text-[10px] text-[#7b8581]">
+            <p className="mt-0.5 text-[12px] text-[#7b8581]">
               {request.id} · {request.publisherType}
             </p>
           </div>
         </div>
 
         <label
-          className="mt-4 block text-[11px] font-semibold text-[#303936]"
+          className="mt-4 block text-[13px] font-semibold text-[#303936]"
           htmlFor="approval-reason"
         >
           Motivo que se registrará
         </label>
         <textarea
-          className="mt-1.5 min-h-[78px] w-full resize-y rounded-md border border-[#dfe5e2] p-3 text-xs leading-5 text-[#4c5751] outline-none focus:border-[#147bc3] focus:ring-2 focus:ring-[#147bc3]/10"
+          className="mt-1.5 min-h-[78px] w-full resize-y rounded-md border border-[#dfe5e2] p-3 text-[13px] leading-5 text-[#4c5751] outline-none focus:border-[#147bc3] focus:ring-2 focus:ring-[#147bc3]/10"
           id="approval-reason"
           maxLength={500}
           onChange={(event) => setReason(event.target.value)}
           value={reason}
         />
-        <p className="mt-1 text-[9px] text-[#89938f]">
+        <p className="mt-1 text-[11px] text-[#89938f]">
           Se guardará en el historial de resoluciones.
         </p>
 
         {error && (
           <p
-            className="mt-3 rounded-md bg-[#fff0f0] px-3 py-2 text-xs text-[#b42318]"
+            className="mt-3 rounded-md bg-[#fff0f0] px-3 py-2 text-[13px] text-[#b42318]"
             role="alert"
           >
             {error}
           </p>
         )}
 
-        <p className="mt-4 border-t border-[#e5e9e7] pt-3 text-[10px] text-[#74807a]">
+        <p className="mt-4 border-t border-[#e5e9e7] pt-3 text-[12px] text-[#74807a]">
           Responsable: {responsible}
         </p>
 
         <div className="mt-5 flex flex-col-reverse justify-end gap-2 border-t border-[#e5e9e7] pt-4 sm:flex-row">
           <button
-            className="h-10 rounded-md border border-[#dfe5e2] px-4 text-xs font-semibold text-[#3d4642] hover:bg-[#f7f9f8] disabled:opacity-60"
+            className="h-10 rounded-md border border-[#dfe5e2] px-4 text-[13px] font-semibold text-[#3d4642] hover:bg-[#f7f9f8] disabled:opacity-60"
             disabled={isSubmitting}
             onClick={onClose}
             type="button"
@@ -135,7 +135,7 @@ function ApproveRequestModal({
             Cancelar
           </button>
           <button
-            className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-[#147bc3] px-4 text-xs font-semibold text-white hover:bg-[#116eae] disabled:cursor-wait disabled:opacity-60"
+            className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-[#147bc3] px-4 text-[13px] font-semibold text-white hover:bg-[#116eae] disabled:cursor-wait disabled:opacity-60"
             disabled={isSubmitting || !reason.trim()}
             onClick={() => onConfirm(reason)}
             type="button"
@@ -144,7 +144,7 @@ function ApproveRequestModal({
             {isSubmitting ? 'Guardando…' : 'Confirmar aprobación'}
           </button>
         </div>
-        <p className="mt-3 text-center text-[9px] text-[#89938f]">
+        <p className="mt-3 text-center text-[11px] text-[#89938f]">
           Se enviará una notificación al solicitante.
         </p>
       </section>
