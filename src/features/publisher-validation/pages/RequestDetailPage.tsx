@@ -12,15 +12,13 @@ import {
 import { Link, useParams } from 'react-router-dom'
 import ApplicantInformation from '@/features/publisher-validation/components/ApplicantInformation'
 import ApproveRequestModal from '@/features/publisher-validation/components/ApproveRequestModal'
-import DocumentsViewer from '@/features/publisher-validation/components/DocumentsViewer'
 import RejectRequestModal from '@/features/publisher-validation/components/RejectRequestModal'
-import { useAuth } from '@/features/auth/hooks/useAuth'
 import { usePublisherRequestDetail } from '@/features/publisher-validation/hooks/usePublisherRequestDetail'
 import {
-  getApplicantDetails,
-  getRequestDocuments,
-  resolvePublisherRequest,
+  approvePublisherRequest,
+  rejectPublisherRequest,
 } from '@/features/publisher-validation/services/publisherValidationService'
+import { formatPublisherType } from '@/features/publisher-validation/utils/statusHelpers'
 import type {
   PublisherRequest,
   PublisherRequestStatus,
@@ -70,7 +68,6 @@ function StatusBadge({ status }: { status: PublisherRequestStatus }) {
 
 function RequestDetailPage() {
   const { id } = useParams()
-  const { user } = useAuth()
   const { request, isLoading, error, updateRequest } =
     usePublisherRequestDetail(id)
   const [dialog, setDialog] = useState<'approve' | 'reject' | null>(null)
@@ -79,8 +76,7 @@ function RequestDetailPage() {
 
   async function saveDecision(
     status: 'approved' | 'rejected',
-    reason: string,
-    category?: string,
+    reason?: string,
   ) {
     if (!request) {
       return
@@ -90,12 +86,10 @@ function RequestDetailPage() {
     setDecisionError(null)
 
     try {
-      const updatedRequest = await resolvePublisherRequest(request.id, {
-        status,
-        responsible: user?.name ?? 'Administradora',
-        reason,
-        ...(category ? { category } : {}),
-      })
+      const updatedRequest =
+        status === 'approved'
+          ? await approvePublisherRequest(request.id)
+          : await rejectPublisherRequest(request.id, reason ?? '')
       updateRequest(updatedRequest)
       setDialog(null)
     } catch (caughtError) {
@@ -138,22 +132,19 @@ function RequestDetailPage() {
     )
   }
 
-  const applicantDetails = getApplicantDetails(request)
-  const documents = getRequestDocuments(request)
   const statusNotice =
     request.status === 'approved'
       ? {
           className: 'bg-[#eaf6ef] text-[#26793a]',
           title: 'Solicitud aprobada. Publicador habilitado.',
-          description: `${request.applicantName} ya puede publicar inmuebles. Se enviará una notificación a su correo.`,
+          description: `${request.applicantName} ya puede publicar inmuebles.`,
           icon: <CheckCircle2 aria-hidden="true" size={18} />,
         }
       : request.status === 'rejected'
         ? {
             className: 'bg-[#fff0f0] text-[#c62828]',
             title: 'Solicitud rechazada.',
-            description:
-              'El solicitante recibirá el motivo de rechazo registrado en la resolución.',
+            description: 'El motivo del rechazo quedó registrado por la administración.',
             icon: <X aria-hidden="true" size={18} />,
           }
         : null
@@ -182,8 +173,9 @@ function RequestDetailPage() {
                 <StatusBadge status={request.status} />
               </div>
               <p className="mt-1 text-[11px] text-[#7b8581] sm:text-[12px]">
-                Solicitud {request.id} · {request.publisherType} ·{' '}
-                {formatDateTime(request.submittedAt)} h
+                Solicitud {request.id} ·{' '}
+                {formatPublisherType(request.profile?.publisherType)} ·{' '}
+                {formatDateTime(request.requestedAt)} h
               </p>
             </div>
           </div>
@@ -213,15 +205,7 @@ function RequestDetailPage() {
 
         <div className="mt-4 grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_300px]">
           <div className="space-y-4">
-            <ApplicantInformation
-              details={applicantDetails}
-              request={request}
-            />
-            <DocumentsViewer
-              applicantName={request.applicantName}
-              documents={documents}
-              submittedAt={request.submittedAt}
-            />
+            <ApplicantInformation request={request} />
           </div>
 
           <aside className="space-y-4">
@@ -274,8 +258,8 @@ function RequestDetailPage() {
                     </button>
                   </div>
                   <p className="mt-4 text-[11px] leading-4 text-[#89938f]">
-                    La decisión se registrará en el historial y se notificará
-                    al solicitante.
+                    La decisión quedará registrada en el historial de la
+                    administración.
                   </p>
                 </div>
               </section>
@@ -286,28 +270,31 @@ function RequestDetailPage() {
             <section className="overflow-hidden rounded-lg border border-[#e1e6e3] bg-white">
               <header className="border-b border-[#e7ebe9] px-4 py-3.5">
                 <h2 className="text-sm font-medium text-[#303936]">
-                  Control de documentación
+                  Completitud del perfil
                 </h2>
               </header>
-              <ul className="space-y-3 px-4 py-4">
-                {[
-                  'Identidad legible y coincidente',
-                  'Información de contacto completa',
-                  'Documentación presentada para revisión',
-                ].map((check) => (
-                  <li
-                    className="flex items-start gap-2 text-[12px] text-[#4c5751]"
-                    key={check}
-                  >
+              <div className="px-4 py-4">
+                {request.missingRequiredFields?.length ? (
+                  <>
+                    <p className="text-[12px] font-semibold text-[#b42318]">
+                      El perfil tiene campos requeridos faltantes.
+                    </p>
+                    <p className="mt-2 text-[12px] leading-5 text-[#7b8581]">
+                      {request.missingRequiredFields.join(', ')}
+                    </p>
+                  </>
+                ) : (
+                  <p className="flex items-start gap-2 text-[12px] text-[#4c5751]">
                     <CircleCheck
                       aria-hidden="true"
                       className="shrink-0 text-[#147bc3]"
                       size={14}
                     />
-                    {check}
-                  </li>
-                ))}
-              </ul>
+                    La administración informa que el perfil contiene los campos
+                    requeridos.
+                  </p>
+                )}
+              </div>
             </section>
 
             <p className="flex items-start gap-2 px-1 text-[11px] leading-4 text-[#89938f]">
@@ -316,8 +303,8 @@ function RequestDetailPage() {
                 className="mt-0.5 shrink-0"
                 size={14}
               />
-              Cada resolución conserva su fecha, responsable y motivo en el
-              historial.
+              La administración conserva la fecha, el responsable y, para
+              rechazos, el motivo de la decisión.
             </p>
           </aside>
         </div>
@@ -332,9 +319,8 @@ function RequestDetailPage() {
           error={decisionError}
           isSubmitting={isSubmitting}
           onClose={() => setDialog(null)}
-          onConfirm={(reason) => void saveDecision('approved', reason)}
+          onConfirm={() => void saveDecision('approved')}
           request={request}
-          responsible={user?.name ?? 'Administradora'}
         />
       )}
       {dialog === 'reject' && (
@@ -342,11 +328,8 @@ function RequestDetailPage() {
           error={decisionError}
           isSubmitting={isSubmitting}
           onClose={() => setDialog(null)}
-          onConfirm={(category, reason) =>
-            void saveDecision('rejected', reason, category)
-          }
+          onConfirm={(reason) => void saveDecision('rejected', reason)}
           request={request}
-          responsible={user?.name ?? 'Administradora'}
         />
       )}
     </>
@@ -355,10 +338,6 @@ function RequestDetailPage() {
 
 function ResolutionCard({ request }: { request: PublisherRequest }) {
   const isApproved = request.status === 'approved'
-  const resolution = request.resolution
-  const defaultReason = isApproved
-    ? 'Solicitud aprobada y publicador habilitado.'
-    : 'La solicitud no cumple con los requisitos de validación.'
 
   return (
     <section className="overflow-hidden rounded-lg border border-[#e1e6e3] bg-white">
@@ -376,25 +355,21 @@ function ResolutionCard({ request }: { request: PublisherRequest }) {
               : 'Rechazada'
           }
         />
-        {resolution?.category && (
-          <ResolutionField label="Categoría" value={resolution.category} />
-        )}
         <ResolutionField
-          label="Responsable"
-          value={resolution?.responsible ?? 'Mariana López'}
+          label="ID del administrador"
+          value={request.reviewedByAdminId ?? 'No disponible'}
         />
         <ResolutionField
           label="Fecha de resolución"
           value={
-            resolution
-              ? `${formatDateTime(resolution.resolvedAt)} h (UTC−3)`
-              : 'Registro de demostración'
+            request.reviewedAt
+              ? `${formatDateTime(request.reviewedAt)} h (UTC−3)`
+              : 'No disponible'
           }
         />
-        <ResolutionField
-          label={isApproved ? 'Motivo de aprobación' : 'Motivo del rechazo'}
-          value={resolution?.reason ?? defaultReason}
-        />
+        {!isApproved && request.rejectionReason && (
+          <ResolutionField label="Motivo del rechazo" value={request.rejectionReason} />
+        )}
       </dl>
     </section>
   )

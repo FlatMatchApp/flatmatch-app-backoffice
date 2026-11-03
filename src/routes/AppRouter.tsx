@@ -24,11 +24,8 @@ function AppRouter() {
 
           <Route path="/requests/:id" element={<RequestDetailPage />} />
 
-          <Route
-            path="/requests/:id/history"
-            element={<RequestHistoryPage />}
-          />
-          <Route path="/history" element={<RequestHistoryPage />} />
+          <Route path="/requests/:id/history" element={<RequestHistoryPage />} />
+          <Route path="/history" element={<Navigate to="/requests" replace />} />
         </Route>
       </Route>
 

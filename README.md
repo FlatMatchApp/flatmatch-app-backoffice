@@ -3,10 +3,8 @@
 Backoffice administrativo de FlatMatch para gestionar solicitudes de validación
 de publicadores de inmuebles.
 
-> **Estado actual:** el login, el listado, el detalle y el historial de
-> solicitudes tienen una primera implementación con datos simulados. Las
-> decisiones mock se guardan en `localStorage`; la autenticación y las
-> solicitudes reales todavía no están conectadas a un backend.
+> **Estado actual:** la autenticación usa Supabase; el listado, el detalle, las
+> decisiones y el historial por solicitud se conectan con la API.
 
 La aplicación usa React, TypeScript, Vite y Tailwind CSS 4. Para los estilos de
 las vistas, prioriza las utilidades de Tailwind en los componentes; reserva
@@ -25,6 +23,15 @@ Desde la raíz del proyecto:
 npm install
 npm run dev
 ```
+
+Configura estas variables en `.env` o `.env.local` en la raíz:
+
+```dotenv
+EXPO_PUBLIC_SUPABASE_URL=https://tu-proyecto.supabase.co
+EXPO_PUBLIC_SUPABASE_ANON_KEY=tu-clave-publica-de-supabase
+EXPO_PUBLIC_API_URL=http://localhost:8000
+```
+
 
 Vite muestra en la terminal la URL local para abrir en el navegador (por defecto,
 `http://localhost:5173`).
@@ -111,24 +118,20 @@ Las rutas están declaradas en `src/routes/AppRouter.tsx`:
 
 | Ruta | Vista |
 | --- | --- |
-| `/login` | Inicio de sesión con autenticación simulada |
-| `/requests` | Listado de solicitudes con filtros y datos de muestra |
-| `/requests/:id` | Detalle, documentación de demostración y resolución |
-| `/requests/:id/history` | Trazabilidad de una solicitud y resoluciones del solicitante |
-| `/history` | Historial general de actividad y resoluciones |
+| `/login` | Inicio de sesión con Supabase Auth |
+| `/requests` | Listado paginado de solicitudes desde la API |
+| `/requests/:id` | Perfil, detalle y resolución desde la API |
+| `/requests/:id/history` | Historial de decisiones de una solicitud desde la API |
 
-Las rutas administrativas están protegidas: sin una sesión se redirige a `/login`.
-La sesión mock se conserva en `sessionStorage` durante la pestaña actual. Para
-probar el flujo, ingresa cualquier correo válido y una contraseña no vacía; el
-modo de prueba no valida credenciales y no debe utilizarse en producción.
+Las rutas administrativas están protegidas: sin una sesión de Supabase se
+redirige a `/login`.
 
-La pantalla de solicitudes simula 56 registros. La búsqueda, los filtros por
-estado, tipo y período, la ordenación, la paginación y la descarga CSV operan
-sobre esos datos locales. En el detalle se puede aprobar o rechazar una
-solicitud pendiente; el rechazo requiere categoría y motivo. La resolución se
-guarda con fecha, responsable y motivo. Los archivos del visor son placeholders
-y no contienen documentación real. El historial se construye a partir de las
-resoluciones guardadas y de eventos de demostración.
+El listado usa los filtros por estado y paginación que ofrece la API. La
+exportación CSV consulta todas las páginas del estado seleccionado. El detalle
+usa los datos del perfil que devuelve el backend y permite aprobar o rechazar
+solicitudes pendientes. La API solo acepta un motivo para el rechazo; no se
+muestran campos de documentos, correo o categoría que no formen parte de su
+contrato. El historial disponible es por solicitud;
 
 ## Alias de imports
 

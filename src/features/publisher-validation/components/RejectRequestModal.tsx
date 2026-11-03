@@ -2,31 +2,21 @@ import { useEffect, useState } from 'react'
 import { AlertCircle, UserRoundX, X } from 'lucide-react'
 import type { PublisherRequest } from '@/features/publisher-validation/types/publisherValidation.types'
 
-const rejectionCategories = [
-  'Documentación vencida',
-  'Documentación incompleta',
-  'Datos no coincidentes',
-  'Otro motivo',
-]
-
 type RejectRequestModalProps = {
   request: PublisherRequest
-  responsible: string
   isSubmitting: boolean
   error: string | null
   onClose: () => void
-  onConfirm: (category: string, reason: string) => void
+  onConfirm: (reason: string) => void
 }
 
 function RejectRequestModal({
   request,
-  responsible,
   isSubmitting,
   error,
   onClose,
   onConfirm,
 }: RejectRequestModalProps) {
-  const [category, setCategory] = useState(rejectionCategories[0])
   const [reason, setReason] = useState('')
 
   useEffect(() => {
@@ -96,29 +86,10 @@ function RejectRequestModal({
               {request.applicantName}
             </p>
             <p className="mt-0.5 text-[12px] text-[#7b8581]">
-              {request.id} · {request.publisherType}
+              Solicitud {request.id}
             </p>
           </div>
         </div>
-
-        <label
-          className="mt-5 block text-[13px] font-semibold text-[#303936]"
-          htmlFor="rejection-category"
-        >
-          Categoría
-        </label>
-        <select
-          className="mt-1.5 h-10 w-full rounded-md border border-[#dfe5e2] bg-white px-3 text-[13px] text-[#3d4642] outline-none focus:border-[#147bc3] focus:ring-2 focus:ring-[#147bc3]/10"
-          id="rejection-category"
-          onChange={(event) => setCategory(event.target.value)}
-          value={category}
-        >
-          {rejectionCategories.map((option) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
 
         <div className="mt-4 flex items-center justify-between gap-2">
           <label
@@ -127,15 +98,17 @@ function RejectRequestModal({
           >
             Motivo del rechazo <span className="text-[#d92727]">*</span>
           </label>
-          {!reason.trim() && (
-            <span className="text-[12px] text-[#d92727]">Obligatorio</span>
+          {reason.trim().length < 3 && (
+            <span className="text-[12px] text-[#d92727]">
+              Mínimo 3 caracteres
+            </span>
           )}
         </div>
         <textarea
           aria-describedby="rejection-hint rejection-counter"
           className="mt-1.5 min-h-[112px] w-full resize-y rounded-md border border-[#b8c2bd] p-3 text-[13px] leading-5 text-[#3d4642] outline-none focus:border-[#147bc3] focus:ring-2 focus:ring-[#147bc3]/10"
           id="rejection-reason"
-          maxLength={500}
+          maxLength={1000}
           onChange={(event) => setReason(event.target.value)}
           placeholder="Explica qué documentación debe corregir o completar."
           required
@@ -143,14 +116,14 @@ function RejectRequestModal({
         />
         <div className="mt-1 flex justify-between gap-2 text-[11px] text-[#89938f]">
           <span id="rejection-hint">Escribe un motivo claro para el solicitante.</span>
-          <span id="rejection-counter">{reason.length}/500</span>
+          <span id="rejection-counter">{reason.length}/1000</span>
         </div>
 
         <div className="mt-4 flex items-start gap-2 rounded-md bg-[#fff0f0] px-3 py-3 text-[12px] leading-4 text-[#c62828]">
           <AlertCircle aria-hidden="true" className="mt-0.5 shrink-0" size={15} />
           <p>
-            Este motivo se enviará al solicitante y quedará registrado en el
-            historial de resoluciones.
+            Este motivo se notificará al solicitante y quedará registrado en
+            el historial de decisiones.
           </p>
         </div>
 
@@ -163,10 +136,6 @@ function RejectRequestModal({
           </p>
         )}
 
-        <p className="mt-4 border-b border-[#e0e5e2] pb-4 text-[12px] text-[#74807a]">
-          Responsable: {responsible}
-        </p>
-
         <div className="mt-4 flex flex-col-reverse justify-end gap-2 sm:flex-row">
           <button
             className="h-10 rounded-md border border-[#dfe5e2] px-4 text-[13px] font-semibold text-[#3d4642] hover:bg-[#f7f9f8] disabled:opacity-60"
@@ -178,8 +147,8 @@ function RejectRequestModal({
           </button>
           <button
             className="h-10 rounded-md bg-[#147bc3] px-4 text-[13px] font-semibold text-white hover:bg-[#116eae] disabled:cursor-not-allowed disabled:opacity-50"
-            disabled={isSubmitting || !reason.trim()}
-            onClick={() => onConfirm(category, reason)}
+            disabled={isSubmitting || reason.trim().length < 3}
+            onClick={() => onConfirm(reason)}
             type="button"
           >
             {isSubmitting ? 'Guardando…' : 'Confirmar rechazo'}

@@ -1,55 +1,52 @@
 import type { AdminUser } from '@/features/auth/types/auth.types'
-
-const SESSION_KEY = 'flatmatch.mock-admin'
+import type { User } from '@supabase/supabase-js'
+import { getSupabaseClient } from '@/services/supabase'
 
 export async function login(email: string, password: string): Promise<AdminUser> {
   if (!email.trim() || !password) {
     throw new Error('Ingresa tu correo electrónico y contraseña.')
   }
 
-  const user: AdminUser = {
-    name: 'Mariana López',
+  const supabase = await getSupabaseClient()
+  const { data, error } = await supabase.auth.signInWithPassword({
     email: email.trim(),
-    role: 'Administradora',
+    password,
+  })
+
+  if (error) {
+    throw new Error(error.message, { cause: error })
   }
 
-  sessionStorage.setItem(SESSION_KEY, JSON.stringify(user))
-  return user
+  if (!data.user) {
+    throw new Error('Supabase no devolvió un usuario para esta sesión.')
+  }
+
+  return toAdminUser(data.user)
 }
 
-export function getCurrentUser(): AdminUser | null {
-  const storedUser = sessionStorage.getItem(SESSION_KEY)
+export async function logout(): Promise<void> {
+  const supabase = await getSupabaseClient()
+  const { error } = await supabase.auth.signOut()
+  if (error) {
+    throw new Error(error.message, { cause: error })
+  }
+}
 
-  if (!storedUser) {
+export function toAdminUser(user: User | null): AdminUser | null {
+  if (!user) {
     return null
   }
 
-  try {
-    const user: unknown = JSON.parse(storedUser)
+  const name =
+    user.user_metadata.full_name ??
+    user.user_metadata.name ??
+    user.email?.split('@')[0] ??
+    'Usuario'
+  const role = user.app_metadata.role
 
-    if (
-      typeof user === 'object' &&
-      user !== null &&
-      'name' in user &&
-      'email' in user &&
-      'role' in user &&
-      typeof user.name === 'string' &&
-      typeof user.email === 'string' &&
-      typeof user.role === 'string'
-    ) {
-      return {
-        name: user.name,
-        email: user.email,
-        role: user.role,
-      }
-    }
-  } catch {
-    sessionStorage.removeItem(SESSION_KEY)
+  return {
+    name: typeof name === 'string' ? name : 'Usuario',
+    email: user.email ?? '',
+    role: typeof role === 'string' ? role : 'Cuenta autenticada',
   }
-
-  return null
-}
-
-export function logout(): void {
-  sessionStorage.removeItem(SESSION_KEY)
 }

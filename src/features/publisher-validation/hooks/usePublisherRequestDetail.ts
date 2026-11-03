@@ -33,23 +33,26 @@ export function usePublisherRequestDetail(requestId: string | undefined) {
     }
 
     getPublisherRequest(requestId)
-      .then((result) => {
+      .then((request) => {
         if (isMounted) {
           setState({
             requestId,
-            request: result,
+            request,
             isLoading: false,
-            error: result ? null : 'No se encontró la solicitud solicitada.',
+            error: null,
           })
         }
       })
-      .catch(() => {
+      .catch((caughtError: unknown) => {
         if (isMounted) {
           setState({
             requestId,
             request: null,
             isLoading: false,
-            error: 'No se pudo cargar el detalle de la solicitud.',
+            error:
+              caughtError instanceof Error
+                ? caughtError.message
+                : 'No se pudo cargar el detalle de la solicitud.',
           })
         }
       })

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/features/auth/hooks/useAuth'
 
 function LoginForm() {
-  const { signIn } = useAuth()
+  const { signIn, authError } = useAuth()
   const navigate = useNavigate()
   const [passwordVisible, setPasswordVisible] = useState(false)
   const [message, setMessage] = useState('')
@@ -191,9 +191,9 @@ function LoginForm() {
         </svg>
       </button>
 
-      {message && (
+      {(message || authError) && (
         <p aria-live="polite" className="text-center text-[12px] text-[#b42318]" role="status">
-          {message}
+          {message || authError}
         </p>
       )}
 

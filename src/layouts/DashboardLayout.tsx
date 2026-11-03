@@ -1,14 +1,25 @@
-import { History, House, LogOut, Inbox } from 'lucide-react'
+import { House, LogOut, Inbox } from 'lucide-react'
+import { useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/features/auth/hooks/useAuth'
 
 function DashboardLayout() {
   const { user, signOut } = useAuth()
   const navigate = useNavigate()
+  const [signOutError, setSignOutError] = useState('')
 
-  function handleSignOut() {
-    signOut()
-    navigate('/login', { replace: true })
+  async function handleSignOut() {
+    setSignOutError('')
+    try {
+      await signOut()
+      navigate('/login', { replace: true })
+    } catch (error) {
+      setSignOutError(
+        error instanceof Error
+          ? error.message
+          : 'No se pudo cerrar la sesión. Intenta nuevamente.',
+      )
+    }
   }
 
   return (
@@ -36,20 +47,6 @@ function DashboardLayout() {
           >
             <Inbox aria-hidden="true" size={16} />
             Solicitudes
-            <span className="ml-auto rounded bg-white/15 px-1.5 py-0.5 text-[12px]">
-              12
-            </span>
-          </NavLink>
-          <NavLink
-            className={({ isActive }) =>
-              `flex min-h-9 flex-1 items-center gap-2 rounded-md px-2.5 text-sm transition-colors lg:flex-none ${
-                isActive ? 'bg-white/15 font-semibold' : 'text-white/90 hover:bg-white/10'
-              }`
-            }
-            to="/history"
-          >
-            <History aria-hidden="true" size={16} />
-            Historial
           </NavLink>
         </nav>
 
@@ -75,6 +72,11 @@ function DashboardLayout() {
               <span className="font-medium text-[#3d4642]">Validación de publicadores</span>
             </div>
             <div className="flex items-center gap-3 sm:gap-4">
+              {signOutError && (
+                <p aria-live="polite" className="text-xs text-[#b42318]" role="status">
+                  {signOutError}
+                </p>
+              )}
               <div className="hidden h-6 border-l border-[#e5e9e7] sm:block" />
               <div className="grid size-7 place-items-center rounded-full bg-[#eef2f1] text-[12px] font-medium text-[#147bc3]">
                 {user?.name

@@ -1,28 +1,22 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Check, CheckCircle2, X } from 'lucide-react'
 import type { PublisherRequest } from '@/features/publisher-validation/types/publisherValidation.types'
 
 type ApproveRequestModalProps = {
   request: PublisherRequest
-  responsible: string
   isSubmitting: boolean
   error: string | null
   onClose: () => void
-  onConfirm: (reason: string) => void
+  onConfirm: () => void
 }
 
 function ApproveRequestModal({
   request,
-  responsible,
   isSubmitting,
   error,
   onClose,
   onConfirm,
 }: ApproveRequestModalProps) {
-  const [reason, setReason] = useState(
-    'Identidad y matrícula verificadas. Documentación completa y vigente.',
-  )
-
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape' && !isSubmitting) {
@@ -90,27 +84,10 @@ function ApproveRequestModal({
               {request.applicantName}
             </p>
             <p className="mt-0.5 text-[12px] text-[#7b8581]">
-              {request.id} · {request.publisherType}
+              Solicitud {request.id}
             </p>
           </div>
         </div>
-
-        <label
-          className="mt-4 block text-[13px] font-semibold text-[#303936]"
-          htmlFor="approval-reason"
-        >
-          Motivo que se registrará
-        </label>
-        <textarea
-          className="mt-1.5 min-h-[78px] w-full resize-y rounded-md border border-[#dfe5e2] p-3 text-[13px] leading-5 text-[#4c5751] outline-none focus:border-[#147bc3] focus:ring-2 focus:ring-[#147bc3]/10"
-          id="approval-reason"
-          maxLength={500}
-          onChange={(event) => setReason(event.target.value)}
-          value={reason}
-        />
-        <p className="mt-1 text-[11px] text-[#89938f]">
-          Se guardará en el historial de resoluciones.
-        </p>
 
         {error && (
           <p
@@ -120,10 +97,6 @@ function ApproveRequestModal({
             {error}
           </p>
         )}
-
-        <p className="mt-4 border-t border-[#e5e9e7] pt-3 text-[12px] text-[#74807a]">
-          Responsable: {responsible}
-        </p>
 
         <div className="mt-5 flex flex-col-reverse justify-end gap-2 border-t border-[#e5e9e7] pt-4 sm:flex-row">
           <button
@@ -136,17 +109,14 @@ function ApproveRequestModal({
           </button>
           <button
             className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-[#147bc3] px-4 text-[13px] font-semibold text-white hover:bg-[#116eae] disabled:cursor-wait disabled:opacity-60"
-            disabled={isSubmitting || !reason.trim()}
-            onClick={() => onConfirm(reason)}
+            disabled={isSubmitting}
+            onClick={onConfirm}
             type="button"
           >
             <Check aria-hidden="true" size={15} />
             {isSubmitting ? 'Guardando…' : 'Confirmar aprobación'}
           </button>
         </div>
-        <p className="mt-3 text-center text-[11px] text-[#89938f]">
-          Se enviará una notificación al solicitante.
-        </p>
       </section>
     </div>
   )

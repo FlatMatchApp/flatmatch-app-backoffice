@@ -18,19 +18,26 @@ export function usePublisherRequestHistory(requestId?: string) {
   useEffect(() => {
     let isMounted = true
 
+    if (!requestId) {
+      return
+    }
+
     getPublisherRequestHistory(requestId)
       .then((events) => {
         if (isMounted) {
           setState({ requestId, events, isLoading: false, error: null })
         }
       })
-      .catch(() => {
+      .catch((caughtError: unknown) => {
         if (isMounted) {
           setState({
             requestId,
             events: [],
             isLoading: false,
-            error: 'No se pudo cargar el historial. Intenta nuevamente.',
+            error:
+              caughtError instanceof Error
+                ? caughtError.message
+                : 'No se pudo cargar el historial. Intenta nuevamente.',
           })
         }
       })
@@ -44,7 +51,11 @@ export function usePublisherRequestHistory(requestId?: string) {
 
   return {
     events: isCurrentHistory ? state.events : [],
-    isLoading: !isCurrentHistory || state.isLoading,
-    error: isCurrentHistory ? state.error : null,
+    isLoading: Boolean(requestId) && (!isCurrentHistory || state.isLoading),
+    error: !requestId
+      ? 'No se indicó el número de solicitud.'
+      : isCurrentHistory
+        ? state.error
+        : null,
   }
 }

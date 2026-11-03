@@ -3,7 +3,17 @@ import { useAuth } from '@/features/auth/hooks/useAuth'
 import { Navigate } from 'react-router-dom'
 
 function LoginPage() {
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, isLoading } = useAuth()
+
+  if (isLoading) {
+    return (
+      <main className="grid min-h-screen place-items-center bg-[#147bc3] px-5 py-10">
+        <p aria-live="polite" className="text-sm text-white" role="status">
+          Verificando sesión…
+        </p>
+      </main>
+    )
+  }
 
   if (isAuthenticated) {
     return <Navigate to="/requests" replace />
