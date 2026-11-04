@@ -1,6 +1,6 @@
 import { getSupabaseClient } from '@/services/supabase'
 
-const apiBaseUrl = import.meta.env.EXPO_PUBLIC_API_URL?.replace(/\/+$/, '')
+const apiBaseUrl = import.meta.env.VITE_API_URL?.replace(/\/+$/, '')
 
 type ApiRequestOptions = {
   method?: 'GET' | 'POST'

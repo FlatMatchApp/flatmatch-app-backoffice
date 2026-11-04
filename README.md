@@ -27,9 +27,9 @@ npm run dev
 Configura estas variables en `.env` o `.env.local` en la raíz:
 
 ```dotenv
-EXPO_PUBLIC_SUPABASE_URL=https://tu-proyecto.supabase.co
-EXPO_PUBLIC_SUPABASE_ANON_KEY=tu-clave-publica-de-supabase
-EXPO_PUBLIC_API_URL=http://localhost:8000
+VITE_SUPABASE_URL=https://tu-proyecto.supabase.co
+VITE_SUPABASE_ANON_KEY=tu-clave-publica-de-supabase
+VITE_API_URL=http://localhost:8000
 ```
 
 
