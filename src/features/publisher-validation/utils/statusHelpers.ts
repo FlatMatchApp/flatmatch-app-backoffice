@@ -6,6 +6,7 @@ export function formatPublisherType(value: string | null | undefined): string {
   const labels: Record<string, string> = {
     agency: 'Agencia',
     individual: 'Particular',
+    owner: 'Dueño directo',
   }
 
   return labels[value] ?? value

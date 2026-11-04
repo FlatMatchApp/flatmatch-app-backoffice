@@ -97,7 +97,7 @@ export async function getAllPublisherRequests(
 
     if (response.items.length === 0 && offset < response.total) {
       throw new Error(
-        'No se recibieron todos los resultados necesarios para completar la exportación.',
+        'No fue posible descargar todas las solicitudes. Inténtalo nuevamente.',
       )
     }
 

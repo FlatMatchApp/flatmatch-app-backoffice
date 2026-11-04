@@ -150,7 +150,7 @@ function RequestHistoryPage() {
             {request.applicantName}
           </p>
           <p className="mt-0.5 truncate text-[11px] text-[#7b8581]">
-            Solicitud {request.id} · Usuario {request.userId}
+            Solicitud {request.id}
           </p>
         </div>
         <span

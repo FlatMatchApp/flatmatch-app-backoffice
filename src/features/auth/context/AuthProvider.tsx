@@ -1,9 +1,9 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { AuthContext } from '@/features/auth/context/AuthContext'
 import {
+  getAdminUser,
   login,
   logout,
-  toAdminUser,
 } from '@/features/auth/services/authService'
 import type { AdminUser } from '@/features/auth/types/auth.types'
 import { getSupabaseClient } from '@/services/supabase'
@@ -25,24 +25,36 @@ function AuthProvider({ children }: AuthProviderProps) {
       const supabase = await getSupabaseClient()
       const {
         data: { subscription },
-      } = supabase.auth.onAuthStateChange((_event, session) => {
+      } = supabase.auth.onAuthStateChange((event) => {
         if (!isMounted) {
           return
         }
 
-        setUser(toAdminUser(session?.user ?? null))
-        setAuthError(null)
-        setIsLoading(false)
+        if (event === 'SIGNED_OUT') {
+          setUser(null)
+          setAuthError(null)
+          setIsLoading(false)
+        }
       })
       unsubscribe = () => subscription.unsubscribe()
 
       const { data, error } = await supabase.auth.getSession()
       if (error) {
-        throw error
+        throw new Error(
+          'No pudimos verificar tu sesión. Inicia sesión nuevamente.',
+          { cause: error },
+        )
       }
 
       if (isMounted) {
-        setUser(toAdminUser(data.session?.user ?? null))
+        const authenticatedUser = data.session?.user
+          ? await getAdminUser(data.session.user)
+          : null
+        if (!isMounted) {
+          return
+        }
+
+        setUser(authenticatedUser)
         setAuthError(null)
         setIsLoading(false)
       }
@@ -53,7 +65,7 @@ function AuthProvider({ children }: AuthProviderProps) {
         setAuthError(
           error instanceof Error
             ? error.message
-            : 'No se pudo inicializar la autenticación con Supabase.',
+            : 'No pudimos verificar tu sesión. Inténtalo nuevamente.',
         )
         setIsLoading(false)
       }

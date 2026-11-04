@@ -297,9 +297,6 @@ function RequestsPage() {
                           <span className="block truncate font-semibold text-[#303936]">
                             {request.applicantName}
                           </span>
-                          <span className="mt-0.5 block truncate text-[10px] text-[#858f8b]">
-                            Usuario {request.userId}
-                          </span>
                         </span>
                       </div>
                     </td>

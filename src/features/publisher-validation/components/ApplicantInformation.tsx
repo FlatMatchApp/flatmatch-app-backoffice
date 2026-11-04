@@ -8,12 +8,28 @@ type ApplicantInformationProps = {
 function ApplicantInformation({ request }: ApplicantInformationProps) {
   const profile = request.profile
   const fields = [
-    { label: 'Nombre', value: [profile?.firstName, profile?.lastName].filter(Boolean).join(' ') },
-    { label: 'Tipo de publicador', value: formatPublisherType(profile?.publisherType) },
-    { label: 'Teléfono', value: profile?.phone },
-    { label: 'Domicilio', value: profile?.address },
-    { label: 'Nombre de la agencia', value: profile?.agencyName },
-    { label: 'CUIT de la agencia', value: profile?.agencyTaxId },
+    {
+      label: 'Nombre',
+      value: [profile?.firstName, profile?.lastName].filter(Boolean).join(' '),
+      emptyValue: 'No informado',
+    },
+    {
+      label: 'Tipo de publicador',
+      value: formatPublisherType(profile?.publisherType),
+      emptyValue: 'No informado',
+    },
+    { label: 'Teléfono', value: profile?.phone, emptyValue: 'No informado' },
+    { label: 'Domicilio', value: profile?.address, emptyValue: 'No informado' },
+    {
+      label: 'Nombre de la agencia',
+      value: profile?.agencyName,
+      emptyValue: 'No corresponde',
+    },
+    {
+      label: 'CUIT de la agencia',
+      value: profile?.agencyTaxId,
+      emptyValue: 'No corresponde',
+    },
   ]
 
   return (
@@ -32,7 +48,7 @@ function ApplicantInformation({ request }: ApplicantInformationProps) {
             <div className="min-w-0" key={field.label}>
               <dt className="text-[12px] text-[#858f8b]">{field.label}</dt>
               <dd className="mt-1 break-words text-[13px] font-medium text-[#3d4642]">
-                {field.value?.trim() || 'No informado'}
+                {field.value?.trim() || field.emptyValue}
               </dd>
             </div>
           ))}

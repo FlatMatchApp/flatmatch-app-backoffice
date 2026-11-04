@@ -12,6 +12,7 @@ import {
 import { Link, useParams } from 'react-router-dom'
 import ApplicantInformation from '@/features/publisher-validation/components/ApplicantInformation'
 import ApproveRequestModal from '@/features/publisher-validation/components/ApproveRequestModal'
+import DocumentationPresented from '@/features/publisher-validation/components/DocumentationPresented'
 import RejectRequestModal from '@/features/publisher-validation/components/RejectRequestModal'
 import { usePublisherRequestDetail } from '@/features/publisher-validation/hooks/usePublisherRequestDetail'
 import {
@@ -206,6 +207,7 @@ function RequestDetailPage() {
         <div className="mt-4 grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_300px]">
           <div className="space-y-4">
             <ApplicantInformation request={request} />
+            <DocumentationPresented />
           </div>
 
           <aside className="space-y-4">

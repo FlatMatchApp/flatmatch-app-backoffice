@@ -12,7 +12,7 @@ export function getSupabaseClient(): Promise<SupabaseClient> {
 
   if (!supabaseUrl || !supabaseAnonKey) {
     throw new Error(
-      'Configura EXPO_PUBLIC_SUPABASE_URL y EXPO_PUBLIC_SUPABASE_ANON_KEY para iniciar sesión.',
+      'No pudimos iniciar sesión en este momento. Inténtalo nuevamente más tarde.',
     )
   }
 
@@ -20,7 +20,10 @@ export function getSupabaseClient(): Promise<SupabaseClient> {
     .then(({ createClient }) => createClient(supabaseUrl, supabaseAnonKey))
     .catch((error: unknown) => {
       supabaseClientPromise = null
-      throw error
+      throw new Error(
+        'No pudimos iniciar sesión en este momento. Inténtalo nuevamente más tarde.',
+        { cause: error },
+      )
     })
 
   return supabaseClientPromise
