@@ -42,7 +42,7 @@ function LoginForm() {
         >
           Correo electrónico
         </label>
-        <div className="flex h-9 items-center gap-2 rounded-[5px] border border-[#dfe5e2] px-2.5 focus-within:border-[#147bc3] focus-within:ring-2 focus-within:ring-[#147bc3]/15">
+        <div className="flex h-9 items-center gap-2 border-0 border-b border-[#147bc3] px-2.5 focus-within:border-b-2">
           <svg
             aria-hidden="true"
             className="size-4 shrink-0 text-[#7b8984]"
@@ -82,7 +82,7 @@ function LoginForm() {
         >
           Contraseña
         </label>
-        <div className="flex h-9 items-center gap-2 rounded-[5px] border border-[#dfe5e2] px-2.5 focus-within:border-[#147bc3] focus-within:ring-2 focus-within:ring-[#147bc3]/15">
+        <div className="flex h-9 items-center gap-2 border-0 border-b border-[#147bc3] px-2.5 focus-within:border-b-2">
           <svg
             aria-hidden="true"
             className="size-4 shrink-0 text-[#7b8984]"
@@ -170,25 +170,11 @@ function LoginForm() {
       </div>
 
       <button
-        className="flex h-9 w-full items-center justify-center gap-2 rounded-[5px] bg-[#147bc3] text-[13px] font-medium text-white transition-colors hover:bg-[#116eae] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#147bc3] active:bg-[#0f629e] disabled:cursor-wait disabled:opacity-70"
+        className="flex h-9 w-full items-center justify-center gap-2 rounded-[8px] bg-[#147bc3] text-[13px] font-bold text-white transition-colors hover:bg-[#116eae] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#147bc3] active:bg-[#0f629e] disabled:cursor-wait disabled:opacity-70"
         disabled={isSubmitting}
         type="submit"
       >
-        {isSubmitting ? 'Ingresando…' : 'Iniciar sesión'}
-        <svg
-          aria-hidden="true"
-          className="size-4"
-          fill="none"
-          viewBox="0 0 24 24"
-        >
-          <path
-            d="M5 12h14m-6-6 6 6-6 6"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="1.8"
-          />
-        </svg>
+        {isSubmitting ? 'Ingresando…' : 'Ingresar'}
       </button>
 
       {(message || authError) && (

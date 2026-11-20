@@ -58,7 +58,7 @@ npm run preview
 
 ```text
 public/
-├── favicon.svg                 # Favicon de FlatMatch
+├── flatiHeader.png             # Logo de FlatMatch usado en el inicio de sesión
 └── images/                     # Imágenes servidas directamente como estáticas
 
 src/
