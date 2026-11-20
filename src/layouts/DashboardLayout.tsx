@@ -1,4 +1,4 @@
-import { House, LogOut, Inbox } from 'lucide-react'
+import { LogOut, Inbox } from 'lucide-react'
 import { useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/features/auth/hooks/useAuth'
@@ -25,11 +25,10 @@ function DashboardLayout() {
   return (
     <div className="min-h-screen bg-[#f3f5f6] lg:flex">
       <aside className="flex shrink-0 flex-col bg-[#147bc3] text-white lg:min-h-screen lg:w-[200px]">
-        <div className="flex items-center gap-2 px-4 py-4">
-          <span className="grid size-7 place-items-center rounded-md bg-white text-[#147bc3]">
-            <House aria-hidden="true" size={18} strokeWidth={2.2} />
-          </span>
-          <span className="text-xl font-medium tracking-tight">FlatMatch</span>
+        <div className="px-4 py-4">
+          <div className="rounded-md bg-white p-1">
+            <img alt="FlatMatch" className="h-auto w-full" src="/flatiHeader.png" />
+          </div>
         </div>
 
         <div className="hidden px-3 pt-2 pb-1 text-[11px] font-semibold tracking-wide text-blue-100 lg:block">
@@ -67,9 +66,9 @@ function DashboardLayout() {
         <header className="h-[58px] shrink-0 border-b border-[#e6e9e8] bg-white">
           <div className="mx-auto flex h-full w-full max-w-[1440px] items-center justify-between px-4 sm:px-6 lg:px-7">
             <div className="flex items-center gap-2 text-[13px] text-[#7b8581]">
-              <span>Backoffice</span>
+              <span className="font-medium text-[#3d4642]">FlatMatch</span>
               <span aria-hidden="true">›</span>
-              <span className="font-medium text-[#3d4642]">Validación de publicadores</span>
+              <span className="font-medium text-[#3d4642]">Panel de administración</span>
             </div>
             <div className="flex items-center gap-3 sm:gap-4">
               {signOutError && (
