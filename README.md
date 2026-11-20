@@ -131,7 +131,7 @@ exportación CSV consulta todas las páginas del estado seleccionado. El detalle
 usa los datos del perfil que devuelve el backend y permite aprobar o rechazar
 solicitudes pendientes. La API solo acepta un motivo para el rechazo; no se
 muestran campos de documentos, correo o categoría que no formen parte de su
-contrato. El historial disponible es por solicitud;
+contrato. El historial disponible es por solicitud.
 
 ## Alias de imports
 
