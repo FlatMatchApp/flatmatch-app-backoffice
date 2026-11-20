@@ -1,3 +1,4 @@
+import { CircleAlert, CircleCheck } from 'lucide-react'
 import type { PublisherRequest } from '@/features/publisher-validation/types/publisherValidation.types'
 import { formatPublisherType } from '@/features/publisher-validation/utils/statusHelpers'
 
@@ -34,13 +35,23 @@ function ApplicantInformation({ request }: ApplicantInformationProps) {
 
   return (
     <section className="overflow-hidden rounded-lg border border-[#e1e6e3] bg-white">
-      <header className="flex items-center justify-between border-b border-[#e7ebe9] px-4 py-3.5 sm:px-5">
+      <header className="flex flex-wrap items-center justify-between gap-2 border-b border-[#e7ebe9] px-4 py-3.5 sm:px-5">
         <h2 className="text-sm font-medium text-[#303936]">
           Perfil del solicitante
         </h2>
-        <span className="text-[11px] text-[#89938f]">
-          Datos informados al solicitar la validación
-        </span>
+        {request.missingRequiredFields?.length ? (
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#fff3f0] px-2.5 py-1 text-[11px] font-semibold text-[#b42318]">
+            <CircleAlert aria-hidden="true" size={13} />
+            {request.missingRequiredFields.length === 1
+              ? 'Falta 1 dato'
+              : `Faltan ${request.missingRequiredFields.length} datos`}
+          </span>
+        ) : (
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#edf7f3] px-2.5 py-1 text-[11px] font-semibold text-[#287a5a]">
+            <CircleCheck aria-hidden="true" size={13} />
+            Perfil completo
+          </span>
+        )}
       </header>
       {profile ? (
         <dl className="grid gap-x-6 gap-y-4 px-4 py-4 sm:grid-cols-2 sm:px-5 lg:grid-cols-3">
@@ -62,7 +73,7 @@ function ApplicantInformation({ request }: ApplicantInformationProps) {
         request.missingRequiredFields.length > 0 && (
           <div className="border-t border-[#e7ebe9] px-4 py-3 sm:px-5">
             <p className="text-[12px] font-semibold text-[#b42318]">
-              Campos requeridos faltantes
+              Datos que todavía faltan
             </p>
             <p className="mt-1 text-[12px] text-[#7b8581]">
               {request.missingRequiredFields.join(', ')}

@@ -3,7 +3,6 @@ import {
   ArrowLeft,
   Check,
   CheckCircle2,
-  CircleCheck,
   Clock3,
   ClipboardList,
   History,
@@ -269,36 +268,6 @@ function RequestDetailPage() {
               <ResolutionCard request={request} />
             )}
 
-            <section className="overflow-hidden rounded-lg border border-[#e1e6e3] bg-white">
-              <header className="border-b border-[#e7ebe9] px-4 py-3.5">
-                <h2 className="text-sm font-medium text-[#303936]">
-                  Completitud del perfil
-                </h2>
-              </header>
-              <div className="px-4 py-4">
-                {request.missingRequiredFields?.length ? (
-                  <>
-                    <p className="text-[12px] font-semibold text-[#b42318]">
-                      El perfil tiene campos requeridos faltantes.
-                    </p>
-                    <p className="mt-2 text-[12px] leading-5 text-[#7b8581]">
-                      {request.missingRequiredFields.join(', ')}
-                    </p>
-                  </>
-                ) : (
-                  <p className="flex items-start gap-2 text-[12px] text-[#4c5751]">
-                    <CircleCheck
-                      aria-hidden="true"
-                      className="shrink-0 text-[#147bc3]"
-                      size={14}
-                    />
-                    La administración informa que el perfil contiene los campos
-                    requeridos.
-                  </p>
-                )}
-              </div>
-            </section>
-
             <p className="flex items-start gap-2 px-1 text-[11px] leading-4 text-[#89938f]">
               <ClipboardList
                 aria-hidden="true"
@@ -365,7 +334,7 @@ function ResolutionCard({ request }: { request: PublisherRequest }) {
           label="Fecha de resolución"
           value={
             request.reviewedAt
-              ? `${formatDateTime(request.reviewedAt)} h (UTC−3)`
+              ? `${formatDateTime(request.reviewedAt)} hs`
               : 'No disponible'
           }
         />
